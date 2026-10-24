@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,Menlo,'DejaVu Sans Mono',monospace" width="985px" height="505px">
+<style>
+@font-face {
+src: local('Consolas'), local('Consolas Bold');
+font-family: 'ConsolasFallback';
+font-display: swap;
+-webkit-size-adjust: 109%;
+size-adjust: 109%;
+}
+text, tspan {white-space: pre;}
+.name {fill: #e6edf3; font-size: 30px; font-weight: bold;}
+.body {fill: #e6edf3; font-size: 15px;}
+.label {fill: #3fb950; font-size: 13px; font-weight: bold; letter-spacing: 2px;}
+.accent {fill: #3fb950;}
+.invite {fill: #3fb950; font-size: 20px; font-weight: bold;}
+</style>
+<text x="17" y="46" class="name">Lisa</text>
+<text x="17" y="78" class="body">Principal Research Scientist ·</text>
+<text x="17" y="100" class="body">PhD &amp; MS Geophysics</text>
+<text x="17" y="136" class="body">Trying to make sense of complicated things, build new ones, and occasionally wander off into the</text>
+<text x="17" y="158" class="body">mountains.</text>
+<rect x="17" y="194" width="56" height="3" class="accent"/>
+<text x="17.0" y="234" class="label">NOW SERVING</text>
+<text x="17.0" y="264" class="body"><tspan class="accent">› </tspan>Compost, shrapnel, and tooling</text>
+<text x="17.0" y="286" class="body">  from outside my work world.</text>
+<text x="17.0" y="316" class="body"><tspan class="accent">› </tspan>Libraries · Launchers ·</text>
+<text x="17.0" y="338" class="body">  Discovery Systems</text>
+<text x="334.0" y="234" class="label">INTERESTS</text>
+<text x="334.0" y="264" class="body"><tspan class="accent">› </tspan>Knowledge compression and</text>
+<text x="334.0" y="286" class="body">  evolutions</text>
+<text x="334.0" y="316" class="body"><tspan class="accent">› </tspan>Wold models and geospatial</text>
+<text x="334.0" y="338" class="body">  intelligence</text>
+<text x="334.0" y="368" class="body"><tspan class="accent">› </tspan>Cooperative Autonomy</text>
+<text x="334.0" y="398" class="body"><tspan class="accent">› </tspan>Learning paradigms and physical</text>
+<text x="334.0" y="420" class="body">  systems</text>
+<text x="651.0" y="234" class="label">HOW I WORK</text>
+<text x="651.0" y="264" class="body"><tspan class="accent">› </tspan>Ask dumb questions, a lot of</text>
+<text x="651.0" y="286" class="body">  them</text>
+<text x="651.0" y="316" class="body"><tspan class="accent">› </tspan>Find the thing that matters</text>
+<text x="651.0" y="338" class="body">  most</text>
+<text x="651.0" y="368" class="body"><tspan class="accent">› </tspan>Design, build, analyze</text>
+<text x="651.0" y="398" class="body"><tspan class="accent">› </tspan>Repeat</text>
+<clipPath id="type0"><rect x="17" y="448" width="0" height="32"><animate attributeName="width" values="0.0;12.1;24.1;36.2;48.3;60.3;72.4;84.5;96.5;108.6;120.7;132.7;144.8;156.9;168.9;181.0;193.1;205.1;217.2;229.3;241.3;253.4;265.5;277.5;289.6;301.6;313.7;325.8;337.8;349.9;362.0;374.0;386.1;398.2;410.2;422.3;434.4;446.4;458.5;470.6;482.6;494.7;506.8;518.8;530.9;543.0;555.0;567.1;579.2;591.2;603.3;615.4;627.4;639.5;651.6;663.6;675.7;687.8;699.8;711.9;724.0;736.0;748.1;760.2;772.2;784.3;796.4;808.4;820.5;832.6;844.6" calcMode="discrete" begin="0.80s" dur="3.15s" fill="freeze"/></rect></clipPath><text x="17" y="472" class="invite" clip-path="url(#type0)">→ Attention is a precious commodity. Try to harvest it thoughtfully...</text>
+<rect x="17" y="454" width="10.9" height="22" class="accent" opacity="0"><set attributeName="opacity" to="1" begin="0.80s"/><animate attributeName="x" values="17.0;29.1;41.1;53.2;65.3;77.3;89.4;101.5;113.5;125.6;137.7;149.7;161.8;173.9;185.9;198.0;210.1;222.1;234.2;246.3;258.3;270.4;282.5;294.5;306.6;318.6;330.7;342.8;354.8;366.9;379.0;391.0;403.1;415.2;427.2;439.3;451.4;463.4;475.5;487.6;499.6;511.7;523.8;535.8;547.9;560.0;572.0;584.1;596.2;608.2;620.3;632.4;644.4;656.5;668.6;680.6;692.7;704.8;716.8;728.9;741.0;753.0;765.1;777.2;789.2;801.3;813.4;825.4;837.5;849.6;861.6" calcMode="discrete" begin="0.80s" dur="3.15s" fill="freeze"/><animate attributeName="fill-opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" dur="1.06s" begin="3.95s" repeatCount="indefinite"/></rect>
+</svg>
