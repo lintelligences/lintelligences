@@ -1,0 +1,272 @@
+"""Builds the images for the GitHub profile README:
+
+  header.svg    the binary portrait on the left of a field of 0s and 1s
+                that fades out to the right and bottom
+  panel.svg     the info panel under it (one accent colour, black text)
+  links/*.svg   one clickable button per link
+  README.md     the page that stacks them
+
+Edit profile.toml, then run:  python3 build_card.py
+(It also writes README.md, so edit profile.toml rather than the README.)
+"""
+import html
+import re
+
+import numpy as np
+from PIL import Image, ImageOps, ImageFilter
+
+PHOTO = "photo.jpg"           # your photo
+HEADER_FILE, PANEL_FILE, LINK_DIR = "header.svg", "panel.svg", "links"
+
+W = 985                       # every image shares this width so they stack cleanly
+ART_X = 15                    # left margin shared by the portrait and the panel
+EXTRA_ROWS = 6                # bit rows below the portrait, so the fade starts under the chin
+FADE_RIGHT = (330, 985)       # header bits fade out across this x range (px)
+SEED = 7                      # background bits are random but repeatable
+
+# ---- the info panel under the header: the words live in profile.toml
+PROFILE_FILE = "profile.toml"
+README_FILE = "README.md"
+INK = "#1f2328"               # body text colour (the accent colour is set in profile.toml)
+
+THEME = dict(fg="#24292f")   # colour of the bits
+
+# ---- binary portrait ------------------------------------------------------------
+BIN_COLS, BIN_ROWS = 49, 38
+BIN_SIZE, BIN_LH, BIN_CHAR_W = 11.5, 13, 7.34
+BIN_CUT = 0.3        # darker than this -> "1", lighter -> "0"
+
+
+def darkness(cols, rows, cell_aspect, x_offset=40):
+    img = Image.open(PHOTO).convert("L")
+    w, h = img.size
+    cw = min(w, int(h * cols * cell_aspect / rows))
+    x0 = min(x_offset, w - cw)
+    img = img.crop((x0, 0, x0 + cw, h))
+    img = ImageOps.autocontrast(img, cutoff=2)
+    img = img.filter(ImageFilter.UnsharpMask(radius=18, percent=160, threshold=0))
+    img = ImageOps.autocontrast(img, cutoff=1).resize((cols, rows), Image.LANCZOS)
+    d = 1 - np.asarray(img).astype(float) / 255
+    return np.clip((d - 0.12) / 0.78, 0, 1)
+
+
+def binary_field(x, y_top, total_cols, total_rows):
+    """The portrait in the top-left BIN_COLS x BIN_ROWS cells, faint random bits everywhere else."""
+    d = darkness(BIN_COLS, BIN_ROWS, BIN_CHAR_W / BIN_LH)
+    rng = np.random.default_rng(SEED)
+    rows = []
+    for r in range(total_rows):
+        cells = []
+        for c in range(total_cols):
+            if r < BIN_ROWS and c < BIN_COLS:
+                v = d[r, c]
+                ch = "1" if v > BIN_CUT else "0"
+                o = max(0.05, v ** 1.1)
+            else:
+                # soft hand-off from the portrait's edge into a quiet, slightly sparkly field
+                if r < BIN_ROWS:
+                    edge = d[r, BIN_COLS - 1] * np.exp(-(c - BIN_COLS) / 3)
+                elif c < BIN_COLS:
+                    edge = d[BIN_ROWS - 1, c] * np.exp(-(r - BIN_ROWS + 1) / 1.6)
+                else:
+                    edge = 0
+                ch = "1" if rng.random() < 0.35 else "0"
+                o = max(edge, 0.05 + rng.random() * (0.10 if ch == "1" else 0.05))
+                if edge > 0.3:
+                    ch = "1"
+            cells.append(f'<tspan fill-opacity="{o:.2f}">{ch}</tspan>')
+        rows.append(f'  <tspan x="{x}" y="{y_top + BIN_LH * r}">{"".join(cells)}</tspan>')
+    return (f'<text font-size="{BIN_SIZE}px" fill="{THEME["fg"]}" class="portrait">\n'
+            + "\n".join(rows) + "\n</text>")
+
+
+# ---- build ----------------------------------------------------------------------
+FONT_FACE = """@font-face {
+src: local('Consolas'), local('Consolas Bold');
+font-family: 'ConsolasFallback';
+font-display: swap;
+-webkit-size-adjust: 109%;
+size-adjust: 109%;
+}"""
+FONTS = "ConsolasFallback,Consolas,Menlo,'DejaVu Sans Mono',monospace"
+
+
+def svg_doc(width, height, style, body):
+    return f"""<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="{FONTS}" width="{width}px" height="{height}px">
+<style>
+{FONT_FACE}
+text, tspan {{white-space: pre;}}
+{style}
+</style>
+{body}
+</svg>
+"""
+
+
+def build_header():
+    total_rows = BIN_ROWS + EXTRA_ROWS
+    y_top = 22
+    height = y_top + BIN_LH * (total_rows - 1) + 10
+    cols = int((W - 2 * ART_X) / BIN_CHAR_W)
+    field = binary_field(ART_X + 2, y_top, cols, total_rows)
+    fade_down_from = y_top + BIN_LH * (BIN_ROWS - 1)      # the portrait's last row
+
+    style = ""
+    body = f"""<defs>
+<linearGradient id="fadeRight" gradientUnits="userSpaceOnUse" x1="{FADE_RIGHT[0]}" y1="0" x2="{FADE_RIGHT[1]}" y2="0">
+  <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="fadeDown" gradientUnits="userSpaceOnUse" x1="0" y1="{fade_down_from}" x2="0" y2="{height}">
+  <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<mask id="maskRight" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{height}">
+  <rect width="{W}" height="{height}" fill="url(#fadeRight)"/>
+</mask>
+<mask id="maskDown" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{height}">
+  <rect width="{W}" height="{height}" fill="url(#fadeDown)"/>
+</mask>
+</defs>
+<g mask="url(#maskRight)"><g mask="url(#maskDown)">
+{field}
+</g></g>"""
+    open(HEADER_FILE, "w").write(svg_doc(W, height, style, body))
+    print(f"wrote {HEADER_FILE}: {W}x{height}")
+
+
+# ---- info panel -------------------------------------------------------------------
+def load_profile():
+    import tomllib
+    try:
+        with open(PROFILE_FILE, "rb") as f:
+            p = tomllib.load(f)
+    except tomllib.TOMLDecodeError as e:
+        raise SystemExit(f"\n{PROFILE_FILE} has a formatting problem: {e}\n"
+                         "Common causes: a missing quote or comma, or a top-level line "
+                         "(name, role, ...) placed below a [[column]] or [[link]] block.")
+    p.setdefault("accent", "#1a7f37")
+    p.setdefault("column", [])
+    p.setdefault("link", [])
+    return p
+
+
+def wrap(text, width):
+    """textwrap that also honours explicit \n line breaks."""
+    import textwrap
+    out = []
+    for para in str(text).split("\n"):
+        out += textwrap.wrap(para, width) or [""]
+    return out
+
+
+def build_panel(p):
+    x = ART_X + 2
+    P_SIZE, P_LH, P_CHAR = 15, 22, 9.05
+    full_chars = int((W - 2 * x) / P_CHAR)
+    esc = lambda t: html.escape(t, quote=False)
+    accent = p["accent"]
+
+    out, y = [], 46
+    if p.get("name"):
+        out.append(f'<text x="{x}" y="{y}" class="name">{esc(p["name"])}</text>')
+        y += 32
+    for key in ("role", "degrees"):
+        if p.get(key):
+            for line in wrap(p[key], full_chars):
+                out.append(f'<text x="{x}" y="{y}" class="body">{esc(line)}</text>')
+                y += P_LH
+    if p.get("intro"):
+        y += 14
+        for line in wrap(p["intro"], full_chars):
+            out.append(f'<text x="{x}" y="{y}" class="body">{esc(line)}</text>')
+            y += P_LH
+
+    cols = p["column"]
+    if cols:
+        y += 14
+        out.append(f'<rect x="{x}" y="{y}" width="56" height="3" class="accent"/>')
+        y += 40
+        col_w = (W - 2 * x) / len(cols)
+        wrap_chars = int((col_w - 30) / P_CHAR)
+        col_bottom = y
+        for i, col in enumerate(cols):
+            cx, cy = x + i * col_w, y
+            if col.get("title"):
+                out.append(f'<text x="{cx}" y="{cy}" class="label">{esc(col["title"].upper())}</text>')
+                cy += 30
+            for item in col.get("items", []):
+                for j, line in enumerate(wrap(item, wrap_chars)):
+                    mark = '<tspan class="accent">› </tspan>' if j == 0 else "  "
+                    out.append(f'<text x="{cx}" y="{cy}" class="body">{mark}{esc(line)}</text>')
+                    cy += P_LH
+                cy += 8
+            col_bottom = max(col_bottom, cy)
+        y = col_bottom - 8
+
+    if p.get("invite"):
+        y += 26
+        for j, line in enumerate(wrap(p["invite"], full_chars - 2)):
+            mark = '<tspan class="accent">→ </tspan>' if j == 0 else "  "
+            out.append(f'<text x="{x}" y="{y}" class="body">{mark}{esc(line)}</text>')
+            y += P_LH
+    height = y + 4
+
+    style = f""".name {{fill: {INK}; font-size: 30px; font-weight: bold;}}
+.body {{fill: {INK}; font-size: {P_SIZE}px;}}
+.label {{fill: {accent}; font-size: 13px; font-weight: bold; letter-spacing: 2px;}}
+.accent {{fill: {accent};}}"""
+    open(PANEL_FILE, "w").write(svg_doc(W, height, style, "\n".join(out)))
+    print(f"wrote {PANEL_FILE}: {W}x{height}")
+
+
+def build_links(p):
+    import os, glob
+    os.makedirs(LINK_DIR, exist_ok=True)
+    for old in glob.glob(f"{LINK_DIR}/*.svg"):          # drop buttons for removed links
+        os.remove(old)
+    files = []
+    for link in p["link"]:
+        text = f'{link["label"]} ↗'
+        w = int(len(text) * 9.05 + 36)
+        body = (f'<rect x="1" y="1" width="{w - 2}" height="38" rx="19" fill="none" '
+                f'stroke="{p["accent"]}" stroke-width="1.5"/>'
+                f'<text x="{w / 2}" y="25" text-anchor="middle" font-size="15px" '
+                f'fill="{p["accent"]}" font-weight="bold">{html.escape(text, quote=False)}</text>')
+        name = f"{LINK_DIR}/{re.sub(r'[^a-z0-9]+', '-', link['label'].lower()).strip('-')}.svg"
+        open(name, "w").write(svg_doc(w, 40, "", body))
+        files.append((name, link["url"], link["label"]))
+    print("wrote", ", ".join(f[0] for f in files) or "no link buttons")
+    return files
+
+
+def build_readme(p, links):
+    """README.md is generated too, so the alt text and link URLs always match profile.toml."""
+    a = lambda t: html.escape(str(t).replace("\n", " "), quote=True)
+    summary = ". ".join(v for v in (p.get("name"), p.get("role"), p.get("degrees"), p.get("intro")) if v)
+    for col in p["column"]:
+        summary += f' {col.get("title", "")}: ' + "; ".join(i.replace("\n", " ") for i in col.get("items", [])) + "."
+    if p.get("name"):
+        header_alt = f'{p["name"]}, drawn in ones and zeros'
+    else:
+        header_alt = "Portrait drawn in ones and zeros"
+    lines = [
+        "<!-- Generated by build_card.py from profile.toml: edit that file, not this one. -->",
+        '<p align="center">',
+        f'  <img src="{HEADER_FILE}" width="100%" alt="{a(header_alt)}"><br>',
+        f'  <img src="{PANEL_FILE}" width="100%" alt="{a(summary)}">',
+        "</p>",
+    ]
+    if links:
+        lines += ["", "<p>"]
+        lines += [f'  <a href="{a(url)}"><img src="{name}" height="36" alt="{a(label)}"></a>&nbsp;'
+                  for name, url, label in links]
+        lines += ["</p>"]
+    open(README_FILE, "w").write("\n".join(lines) + "\n")
+    print(f"wrote {README_FILE}")
+
+
+if __name__ == "__main__":
+    profile = load_profile()
+    build_header()
+    build_panel(profile)
+    build_readme(profile, build_links(profile))

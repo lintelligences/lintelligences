@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,Menlo,'DejaVu Sans Mono',monospace" width="234px" height="40px">
+<style>
+@font-face {
+src: local('Consolas'), local('Consolas Bold');
+font-family: 'ConsolasFallback';
+font-display: swap;
+-webkit-size-adjust: 109%;
+size-adjust: 109%;
+}
+text, tspan {white-space: pre;}
+
+</style>
+<rect x="1" y="1" width="232" height="38" rx="19.0" fill="none" stroke="#1f2328" stroke-width="1.5"/><text x="117.0" y="25.4" text-anchor="middle" font-size="15px" fill="#1f2328" font-weight="bold">Discovery ↗</text>
+</svg>
