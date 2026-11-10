@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Random · NEIC Binary Seismogram</title>
+  <style>
+    @font-face {
+      src: local('Consolas'), local('Consolas Bold');
+      font-family: 'ConsolasFallback';
+      font-display: swap;
+      -webkit-size-adjust: 109%;
+      size-adjust: 109%;
+    }
+
+    :root {
+      color-scheme: light dark;
+      --font: ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace;
+      --bg: #ffffff;
+      --ink: #1f2328;
+      --muted: #57606a;
+      --faint: #8c959f;
+      --hairline: rgba(31, 35, 40, 0.16);
+      --panel-bg: rgba(255, 255, 255, 0.78);
+      --pill-hover: rgba(31, 35, 40, 0.07);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --faint: #6e7681;
+        --hairline: rgba(230, 237, 243, 0.16);
+        --panel-bg: rgba(13, 17, 23, 0.76);
+        --pill-hover: rgba(230, 237, 243, 0.09);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    canvas#stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    header.hud {
+      position: fixed;
+      top: 22px;
+      left: 26px;
+      right: 26px;
+      max-width: 680px;
+      pointer-events: none;
+      z-index: 2;
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .kicker {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    h1.title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 5px;
+      user-select: text;
+    }
+
+    .meta {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--muted);
+      user-select: text;
+    }
+
+    .meta strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .status-line {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--faint);
+      min-height: 1.3em;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 12px;
+      background: var(--ink);
+      vertical-align: -1px;
+      margin-left: 4px;
+      animation: blink 1.06s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    footer.bar {
+      position: fixed;
+      left: 26px;
+      right: 26px;
+      bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .bar-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      flex-wrap: wrap;
+    }
+
+    a.pill, button.pill {
+      appearance: none;
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--panel-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      height: 36px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.14s ease, opacity 0.14s ease;
+    }
+
+    a.pill:hover, button.pill:hover:not(:disabled) {
+      background: var(--pill-hover);
+    }
+
+    button.pill:disabled {
+      opacity: 0.48;
+      cursor: wait;
+    }
+
+    a.subtle-link {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    a.subtle-link:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+
+    .whisper {
+      font-size: 11.5px;
+      color: var(--faint);
+      padding: 2px 6px;
+      background: var(--panel-bg);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 640px) {
+      header.hud {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        padding: 8px 10px;
+      }
+      h1.title { font-size: 15px; }
+      .meta { font-size: 11.5px; }
+      footer.bar {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+      a.pill, button.pill {
+        height: 32px;
+        font-size: 12px;
+        padding: 0 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stage" aria-label="Greyscale world map with live NEIC earthquake waveform superimposed in binary digits"></canvas>
+
+  <header class="hud" id="hud">
+    <div class="kicker" id="kicker">NEIC · RANDOM WAVEFORM</div>
+    <h1 class="title" id="eventTitle">Pulling recent seismic catalog…</h1>
+    <div class="meta" id="eventMeta">Connecting to USGS NEIC &amp; EarthScope FDSN</div>
+    <div class="status-line" id="statusLine">→ querying earthquake.usgs.gov<span class="cursor"></span></div>
+  </header>
+
+  <footer class="bar">
+    <div class="bar-group">
+      <a class="pill" href="https://github.com/lintelligences">← Profile</a>
+      <a class="subtle-link" id="usgsLink" href="https://earthquake.usgs.gov" target="_blank" rel="noopener noreferrer" hidden>neic event ↗</a>
+      <span class="whisper" id="whisper" hidden></span>
+    </div>
+    <div class="bar-group">
+      <button class="pill" id="filterBtn" type="button" title="Toggle zero-phase bandpass vs raw detrended counts (F)" disabled>filter: bandpass</button>
+      <button class="pill" id="rollBtn" type="button" title="Pull another random recent NEIC event (R)">another ↻</button>
+    </div>
+  </footer>
+
+  <script>
+  (() => {
+    'use strict';
+
+    // ---- Palette (strictly greyscale, synced with OS light/dark theme) --------------
+    const PALETTES = {
+      light: {
+        bg: '#ffffff',
+        bgRgb: '255, 255, 255',
+        sphereFill: '#f7f8fa',
+        landFill: '#e6eaef',
+        landStroke: '#8c959f',
+        countryStroke: 'rgba(140, 149, 159, 0.22)',
+        graticule: 'rgba(31, 35, 40, 0.085)',
+        limb: 'rgba(31, 35, 40, 0.28)',
+        ring: 'rgba(31, 35, 40, 0.14)',
+        rayPath: '#1f2328',
+        ink: '#1f2328',
+        inkRgb: '31, 35, 40',
+        muted: '#57606a',
+        traceLine: 'rgba(31, 35, 40, 0.30)',
+        baseline: 'rgba(31, 35, 40, 0.16)',
+        markerFill: '#ffffff',
+      },
+      dark: {
+        bg: '#0d1117',
+        bgRgb: '13, 17, 23',
+        sphereFill: '#11161d',
+        landFill: '#1b222c',
+        landStroke: '#6e7681',
+        countryStroke: 'rgba(110, 118, 129, 0.20)',
+        graticule: 'rgba(230, 237, 243, 0.07)',
+        limb: 'rgba(230, 237, 243, 0.25)',
+        ring: 'rgba(230, 237, 243, 0.13)',
+        rayPath: '#e6edf3',
+        ink: '#e6edf3',
+        inkRgb: '230, 237, 243',
+        muted: '#8b949e',
+        traceLine: 'rgba(230, 237, 243, 0.30)',
+        baseline: 'rgba(230, 237, 243, 0.15)',
+        markerFill: '#0d1117',
+      },
+    };
+
+    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const getPalette = () => (darkQuery.matches ? PALETTES.dark : PALETTES.light);
+
+    // ---- Open networks reliably archived in real time on EarthScope / GEOFON --------
+    const TIER1_NETS = new Set([
+      'IU', 'II', 'US', 'CU', 'IC', 'GT', 'CI', 'NC', 'BK', 'UW', 'AK',
+      'NN', 'UU', 'N4', 'TA', 'TX', 'OK', 'NM', 'PR', 'HV', 'AV', 'IW',
+      'WY', 'MB', 'LD', 'CN', 'AU', 'G',
+    ]);
+    const TIER2_NETS = new Set([
+      'GE', 'MN', 'CH', 'OE', 'CZ', 'IV', 'HL', 'HT', 'KO', 'NZ', 'TW',
+    ]);
+    const BLOCKED_NETS = new Set(['IM', 'SY']);
+
+    // ---- State ----------------------------------------------------------------------
+    const state = {
+      catalog: null,
+      seenIds: new Set(),
+      world: null,          // { countries: [...rings], land: [...rings] }
+      current: null,        // active event + station + raw/filtered waveform bundle
+      filterMode: 'bp',     // 'bp' | 'raw'
+      pullCount: 0,
+      sweepProgress: 1,
+      animFrame: 0,
+      loading: false,
+    };
+
+    // ---- DOM ------------------------------------------------------------------------
+    const canvas = document.getElementById('stage');
+    const ctx = canvas.getContext('2d');
+    const elTitle = document.getElementById('eventTitle');
+    const elMeta = document.getElementById('eventMeta');
+    const elStatus = document.getElementById('statusLine');
+    const elUsgsLink = document.getElementById('usgsLink');
+    const elWhisper = document.getElementById('whisper');
+    const btnFilter = document.getElementById('filterBtn');
+    const btnRoll = document.getElementById('rollBtn');
+
+    function setStatus(msg, busy = false) {
+      if (!msg) {
+        elStatus.textContent = '';
+        elStatus.hidden = true;
+        return;
+      }
+      elStatus.hidden = false;
+      elStatus.innerHTML = '';
+      elStatus.appendChild(document.createTextNode(msg));
+      if (busy) {
+        const cur = document.createElement('span');
+        cur.className = 'cursor';
+        elStatus.appendChild(cur);
+      }
+    }
+
+    // ---- Deterministic PRNG (for repeatable binary halo dissolve per event) ---------
+    function hashSeed(str) {
+      let h = 2166136261 >>> 0;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return h >>> 0;
+    }
+
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a |= 0;
+        a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    // ---- Fetch helper with timeout (no custom headers -> zero CORS preflight) -------
+    async function fetchWithTimeout(url, timeoutMs = 9500, as = 'json') {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        if (res.status === 204) return null;
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (as === 'arrayBuffer') return await res.arrayBuffer();
+        if (as === 'text') return await res.text();
+        return await res.json();
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    // ---- TopoJSON decoder (20 lines, zero external libraries) -----------------------
+    function decodeTopoJson(topo) {
+      const tf = topo.transform;
+      const sx = tf ? tf.scale[0] : 1, sy = tf ? tf.scale[1] : 1;
+      const tx = tf ? tf.translate[0] : 0, ty = tf ? tf.translate[1] : 0;
+
+      const decodedArcs = topo.arcs.map((arc) => {
+        let x = 0, y = 0;
+        const pts = new Array(arc.length);
+        for (let i = 0; i < arc.length; i++) {
+          x += arc[i][0];
+          y += arc[i][1];
+          pts[i] = [x * sx + tx, y * sy + ty];
+        }
+        return pts;
+      });
+
+      function stitchRing(arcIndices) {
+        const ring = [];
+        for (let i = 0; i < arcIndices.length; i++) {
+          const idx = arcIndices[i];
+          const arc = idx >= 0 ? decodedArcs[idx] : decodedArcs[~idx].slice().reverse();
+          const start = i === 0 ? 0 : 1;
+          for (let j = start; j < arc.length; j++) ring.push(arc[j]);
+        }
+        return ring;
+      }
+
+      function extractRings(geom) {
+        const out = [];
+        if (!geom) return out;
+        if (geom.type === 'GeometryCollection') {
+          for (const g of geom.geometries) out.push(...extractRings(g));
+        } else if (geom.type === 'Polygon') {
+          for (const r of geom.arcs) out.push(stitchRing(r));
+        } else if (geom.type === 'MultiPolygon') {
+          for (const poly of geom.arcs) {
+            for (const r of poly) out.push(stitchRing(r));
+          }
+        }
+        return out;
+      }
+
+      // Precompute 3D unit vectors along rings (subdividing long segments > 2.5 deg)
+      function densifyToUnitVecs(rings) {
+        return rings.map((ring) => {
+          const vecs = [];
+          for (let i = 0; i < ring.length; i++) {
+            const [lon1, lat1] = ring[i];
+            const v1 = latLonToVec(lat1, lon1);
+            vecs.push(v1);
+            if (i + 1 < ring.length) {
+              const [lon2, lat2] = ring[i + 1];
+              const dLon = Math.abs(lon2 - lon1);
+              const dLat = Math.abs(lat2 - lat1);
+              if (dLon < 170 && (dLon > 2.5 || dLat > 2.5)) {
+                const v2 = latLonToVec(lat2, lon2);
+                const steps = Math.min(24, Math.ceil(Math.max(dLon, dLat) / 2.2));
+                for (let s = 1; s < steps; s++) {
+                  const f = s / steps;
+                  const vx = v1[0] * (1 - f) + v2[0] * f;
+                  const vy = v1[1] * (1 - f) + v2[1] * f;
+                  const vz = v1[2] * (1 - f) + v2[2] * f;
+                  const inv = 1 / (Math.hypot(vx, vy, vz) || 1);
+                  vecs.push([vx * inv, vy * inv, vz * inv]);
+                }
+              }
+            }
+          }
+          return vecs;
+        });
+      }
+
+      return {
+        countries: topo.objects.countries ? densifyToUnitVecs(extractRings(topo.objects.countries)) : [],
+        land: topo.objects.land ? densifyToUnitVecs(extractRings(topo.objects.land)) : [],
+      };
+    }
+
+    async function ensureWorldMap() {
+      if (state.world) return state.world;
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json',
+        'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+      ];
+      for (const u of urls) {
+        try {
+          const topo = await fetchWithTimeout(u, 6500, 'json');
+          if (topo && topo.arcs) {
+            state.world = decodeTopoJson(topo);
+            return state.world;
+          }
+        } catch (_) {
+          // fall through to backup resolution or graticule-only
+        }
+      }
+      state.world = { countries: [], land: [] };
+      return state.world;
+    }
+
+    // ---- Spherical Geodesy ----------------------------------------------------------
+    const DEG = Math.PI / 180;
+    const RAD = 180 / Math.PI;
+
+    function latLonToVec(latDeg, lonDeg) {
+      const la = latDeg * DEG;
+      const lo = lonDeg * DEG;
+      const cla = Math.cos(la);
+      return [cla * Math.cos(lo), cla * Math.sin(lo), Math.sin(la)];
+    }
+
+    function vecToLatLon(v) {
+      const z = Math.max(-1, Math.min(1, v[2]));
+      return [Math.asin(z) * RAD, Math.atan2(v[1], v[0]) * RAD];
+    }
+
+    function reckonLatLon(lat1Deg, lon1Deg, distDeg, azDeg) {
+      const lat1 = lat1Deg * DEG;
+      const lon1 = lon1Deg * DEG;
+      const d = distDeg * DEG;
+      const az = azDeg * DEG;
+      const sinLat2 = Math.sin(lat1) * Math.cos(d) + Math.cos(lat1) * Math.sin(d) * Math.cos(az);
+      const lat2 = Math.asin(Math.max(-1, Math.min(1, sinLat2)));
+      const lon2 = lon1 + Math.atan2(
+        Math.sin(az) * Math.sin(d) * Math.cos(lat1),
+        Math.cos(d) - Math.sin(lat1) * Math.sin(lat2)
+      );
+      return [lat2 * RAD, ((lon2 * RAD + 540) % 360) - 180];
+    }
+
+    function angularDistAz(lat1Deg, lon1Deg, lat2Deg, lon2Deg) {
+      const v1 = latLonToVec(lat1Deg, lon1Deg);
+      const v2 = latLonToVec(lat2Deg, lon2Deg);
+      const dot = Math.max(-1, Math.min(1, v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]));
+      const distDeg = Math.acos(dot) * RAD;
+      const la1 = lat1Deg * DEG, lo1 = lon1Deg * DEG;
+      const la2 = lat2Deg * DEG, lo2 = lon2Deg * DEG;
+      const dLon = lo2 - lo1;
+      const y = Math.sin(dLon) * Math.cos(la2);
+      const x = Math.cos(la1) * Math.sin(la2) - Math.sin(la1) * Math.cos(la2) * Math.cos(dLon);
+      const azDeg = (Math.atan2(y, x) * RAD + 360) % 360;
+      return { distDeg, azDeg };
+    }
+
+    function slerpGreatCircle(lat1, lon1, lat2, lon2, nPts = 96) {
+      const v1 = latLonToVec(lat1, lon1);
+      const v2 = latLonToVec(lat2, lon2);
+      const dot = Math.max(-1, Math.min(1, v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]));
+      const omega = Math.acos(dot);
+      if (omega < 1e-5) return [v1, v2];
+      const sinO = Math.sin(omega);
+      const out = new Array(nPts);
+      for (let i = 0; i < nPts; i++) {
+        const t = i / (nPts - 1);
+        const a = Math.sin((1 - t) * omega) / sinO;
+        const b = Math.sin(t * omega) / sinO;
+        out[i] = [a * v1[0] + b * v2[0], a * v1[1] + b * v2[1], a * v1[2] + b * v2[2]];
+      }
+      return out;
+    }
+
+    function smallCircleVecs(centerLat, centerLon, radiusDeg, nPts = 120) {
+      const out = new Array(nPts + 1);
+      for (let i = 0; i <= nPts; i++) {
+        const az = (i / nPts) * 360;
+        const [la, lo] = reckonLatLon(centerLat, centerLon, radiusDeg, az);
+        out[i] = latLonToVec(la, lo);
+      }
+      return out;
+    }
+
+    // Lambert Azimuthal Equal-Area projector (hemisphere c=90deg maps to circle of radius R)
+    function makeProjector(centerLat, centerLon, cx, cy, R) {
+      const la0 = centerLat * DEG;
+      const lo0 = centerLon * DEG;
+      const n0 = [Math.cos(la0) * Math.cos(lo0), Math.cos(la0) * Math.sin(lo0), Math.sin(la0)];
+      const eEast = [-Math.sin(lo0), Math.cos(lo0), 0];
+      const eNorth = [
+        -Math.sin(la0) * Math.cos(lo0),
+        -Math.sin(la0) * Math.sin(lo0),
+        Math.cos(la0),
+      ];
+      const scale = R / Math.SQRT2;
+
+      return function projectVec(v) {
+        const cosC = v[0] * n0[0] + v[1] * n0[1] + v[2] * n0[2];
+        const x3 = v[0] * eEast[0] + v[1] * eEast[1] + v[2] * eEast[2];
+        const y3 = v[0] * eNorth[0] + v[1] * eNorth[1] + v[2] * eNorth[2];
+        // Clamp near antipode (c > 170 deg -> cosC < -0.985) so back-hemisphere rings stay smoothly outside R
+        const clampedCos = Math.max(-0.985, cosC);
+        const k = Math.sqrt(2 / (1 + clampedCos));
+        return [cx + scale * k * x3, cy - scale * k * y3, cosC];
+      };
+    }
+
+    // ---- MiniSEED v2 Decoder (INT16, INT32, FLOAT32, FLOAT64, Steim-1, Steim-2) -----
+    function sbits(val, bits) {
+      if (bits === 32) return val | 0;
+      const shift = 32 - bits;
+      return (val << shift) >> shift;
+    }
+
+    function decodeSteimRecord(view, recOffset, dataOffset, recLen, nSamples, encoding, littleEndianData) {
+      const nFrames = Math.floor((recLen - dataOffset) / 64);
+      const diffs = [];
+      let x0 = 0;
+      let hasX0 = false;
+
+      for (let f = 0; f < nFrames && diffs.length < nSamples; f++) {
+        const fOff = recOffset + dataOffset + f * 64;
+        if (fOff + 64 > view.byteLength) break;
+        const ctrl = view.getUint32(fOff, littleEndianData);
+
+        for (let wIdx = 1; wIdx < 16 && diffs.length < nSamples; wIdx++) {
+          const ck = (ctrl >>> (30 - 2 * wIdx)) & 0x3;
+          const w = view.getUint32(fOff + wIdx * 4, littleEndianData);
+
+          if (f === 0 && wIdx === 1) {
+            x0 = sbits(w, 32);
+            hasX0 = true;
+            continue;
+          }
+          if (f === 0 && wIdx === 2) {
+            // xn checksum stored here
+            continue;
+          }
+          if (ck === 0) continue;
+
+          if (ck === 1) {
+            diffs.push(sbits(w >>> 24, 8), sbits(w >>> 16, 8), sbits(w >>> 8, 8), sbits(w, 8));
+          } else if (ck === 2) {
+            if (encoding === 10) {
+              diffs.push(sbits(w >>> 16, 16), sbits(w, 16));
+            } else {
+              const dnib = (w >>> 30) & 0x3;
+              if (dnib === 1) {
+                diffs.push(sbits(w, 30));
+              } else if (dnib === 2) {
+                diffs.push(sbits(w >>> 15, 15), sbits(w, 15));
+              } else if (dnib === 3) {
+                diffs.push(sbits(w >>> 20, 10), sbits(w >>> 10, 10), sbits(w, 10));
+              }
+            }
+          } else if (ck === 3) {
+            if (encoding === 10) {
+              diffs.push(sbits(w, 32));
+            } else {
+              const dnib = (w >>> 30) & 0x3;
+              if (dnib === 0) {
+                diffs.push(
+                  sbits(w >>> 24, 6), sbits(w >>> 18, 6), sbits(w >>> 12, 6),
+                  sbits(w >>> 6, 6), sbits(w, 6)
+                );
+              } else if (dnib === 1) {
+                diffs.push(
+                  sbits(w >>> 25, 5), sbits(w >>> 20, 5), sbits(w >>> 15, 5),
+                  sbits(w >>> 10, 5), sbits(w >>> 5, 5), sbits(w, 5)
+                );
+              } else if (dnib === 2) {
+                diffs.push(
+                  sbits(w >>> 24, 4), sbits(w >>> 20, 4), sbits(w >>> 16, 4),
+                  sbits(w >>> 12, 4), sbits(w >>> 8, 4), sbits(w >>> 4, 4), sbits(w, 4)
+                );
+              }
+            }
+          }
+        }
+      }
+
+      const count = Math.min(nSamples, diffs.length);
+      const out = new Float64Array(count);
+      if (count === 0) return out;
+      out[0] = hasX0 ? x0 : diffs[0];
+      let cur = out[0];
+      for (let i = 1; i < count; i++) {
+        cur += diffs[i];
+        out[i] = cur;
+      }
+      return out;
+    }
+
+    function readAscii(bytes, start, len) {
+      let s = '';
+      for (let i = 0; i < len; i++) {
+        const c = bytes[start + i];
+        if (c >= 32 && c <= 126) s += String.fromCharCode(c);
+      }
+      return s.trim();
+    }
+
+    function decodeMiniSeed(buffer) {
+      const view = new DataView(buffer);
+      const bytes = new Uint8Array(buffer);
+      const records = [];
+      let pos = 0;
+
+      while (pos + 48 <= buffer.byteLength) {
+        const yrBE = view.getUint16(pos + 20, false);
+        const leHdr = !(yrBE >= 1970 && yrBE <= 2100);
+        const year = view.getUint16(pos + 20, leHdr);
+        const doy = view.getUint16(pos + 22, leHdr);
+        if (year < 1970 || year > 2100 || doy < 1 || doy > 366) {
+          pos += 512;
+          continue;
+        }
+
+        const sta = readAscii(bytes, pos + 8, 5);
+        const loc = readAscii(bytes, pos + 13, 2);
+        const cha = readAscii(bytes, pos + 15, 3);
+        const net = readAscii(bytes, pos + 18, 2);
+
+        const hr = view.getUint8(pos + 24);
+        const mn = view.getUint8(pos + 25);
+        const sc = view.getUint8(pos + 26);
+        const sub100us = view.getUint16(pos + 28, leHdr);
+        const startTimeMs = Date.UTC(year, 0, doy, hr, mn, sc) + sub100us * 0.1;
+
+        const nSamples = view.getUint16(pos + 30, leHdr);
+        const srf = view.getInt16(pos + 32, leHdr);
+        const srm = view.getInt16(pos + 34, leHdr);
+        let sampleRate = 0;
+        if (srf > 0 && srm > 0) sampleRate = srf * srm;
+        else if (srf > 0 && srm < 0) sampleRate = -srf / srm;
+        else if (srf < 0 && srm > 0) sampleRate = -srm / srf;
+        else if (srf < 0 && srm < 0) sampleRate = 1 / (srf * srm);
+
+        const dataOffset = view.getUint16(pos + 44, leHdr);
+        let blkOffset = view.getUint16(pos + 46, leHdr);
+
+        let encoding = 11;
+        let leData = false;
+        let recLen = 512;
+        let safety = 0;
+
+        while (blkOffset >= 48 && pos + blkOffset + 4 <= buffer.byteLength && safety++ < 16) {
+          const blkType = view.getUint16(pos + blkOffset, leHdr);
+          const nextBlk = view.getUint16(pos + blkOffset + 2, leHdr);
+          if (blkType === 1000 && pos + blkOffset + 7 <= buffer.byteLength) {
+            encoding = view.getUint8(pos + blkOffset + 4);
+            const wordOrder = view.getUint8(pos + blkOffset + 5);
+            const recExp = view.getUint8(pos + blkOffset + 6);
+            leData = wordOrder === 0;
+            if (recExp >= 8 && recExp <= 20) recLen = 1 << recExp;
+          } else if (blkType === 100 && pos + blkOffset + 8 <= buffer.byteLength) {
+            const actualRate = view.getFloat32(pos + blkOffset + 4, leHdr);
+            if (actualRate > 0 && Number.isFinite(actualRate)) sampleRate = actualRate;
+          }
+          blkOffset = nextBlk;
+        }
+
+        if (pos + recLen > buffer.byteLength) recLen = buffer.byteLength - pos;
+        if (recLen < 64) break;
+
+        if (nSamples > 0 && sampleRate > 0 && dataOffset >= 48 && dataOffset < recLen) {
+          let samples = null;
+          const availBytes = recLen - dataOffset;
+          const p0 = pos + dataOffset;
+
+          if (encoding === 10 || encoding === 11) {
+            samples = decodeSteimRecord(view, pos, dataOffset, recLen, nSamples, encoding, leData);
+          } else if (encoding === 1) {
+            const cnt = Math.min(nSamples, availBytes >> 1);
+            samples = new Float64Array(cnt);
+            for (let i = 0; i < cnt; i++) samples[i] = view.getInt16(p0 + i * 2, leData);
+          } else if (encoding === 3) {
+            const cnt = Math.min(nSamples, availBytes >> 2);
+            samples = new Float64Array(cnt);
+            for (let i = 0; i < cnt; i++) samples[i] = view.getInt32(p0 + i * 4, leData);
+          } else if (encoding === 4) {
+            const cnt = Math.min(nSamples, availBytes >> 2);
+            samples = new Float64Array(cnt);
+            for (let i = 0; i < cnt; i++) samples[i] = view.getFloat32(p0 + i * 4, leData);
+          } else if (encoding === 5) {
+            const cnt = Math.min(nSamples, availBytes >> 3);
+            samples = new Float64Array(cnt);
+            for (let i = 0; i < cnt; i++) samples[i] = view.getFloat64(p0 + i * 8, leData);
+          }
+
+          if (samples && samples.length > 0) {
+            records.push({ net, sta, loc, cha, startTimeMs, sampleRate, samples });
+          }
+        }
+        pos += recLen;
+      }
+      return records;
+    }
+
+    function assembleStream(records, preferredCha, preferredLoc, winStartMs, winEndMs) {
+      if (!records.length) return null;
+      const groups = new Map();
+      for (const r of records) {
+        const key = `${r.net}.${r.sta}.${r.loc}.${r.cha}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(r);
+      }
+
+      let best = null;
+      let bestScore = -1e9;
+
+      for (const [key, recs] of groups.entries()) {
+        recs.sort((a, b) => a.startTimeMs - b.startTimeMs);
+        const fs = recs[0].sampleRate;
+        if (fs < 2 || fs > 500) continue;
+
+        const firstMs = recs[0].startTimeMs;
+        const lastRec = recs[recs.length - 1];
+        const lastMs = lastRec.startTimeMs + (lastRec.samples.length / fs) * 1000;
+        const totalSpanSamples = Math.round(((lastMs - firstMs) / 1000) * fs);
+        if (totalSpanSamples < 40 || totalSpanSamples > 500000) continue;
+
+        const data = new Float64Array(totalSpanSamples);
+        const mask = new Uint8Array(totalSpanSamples);
+        for (const r of recs) {
+          const idx0 = Math.round(((r.startTimeMs - firstMs) / 1000) * fs);
+          for (let i = 0; i < r.samples.length; i++) {
+            const k = idx0 + i;
+            if (k >= 0 && k < totalSpanSamples && Number.isFinite(r.samples[i])) {
+              data[k] = r.samples[i];
+              mask[k] = 1;
+            }
+          }
+        }
+
+        // Check coverage in the target display window [winStartMs, winEndMs]
+        const w0 = Math.round(((winStartMs - firstMs) / 1000) * fs);
+        const w1 = Math.round(((winEndMs - firstMs) / 1000) * fs);
+        const expected = Math.max(1, w1 - w0);
+        let present = 0;
+        let minV = Infinity, maxV = -Infinity;
+        for (let k = Math.max(0, w0); k < Math.min(totalSpanSamples, w1); k++) {
+          if (mask[k]) {
+            present++;
+            if (data[k] < minV) minV = data[k];
+            if (data[k] > maxV) maxV = data[k];
+          }
+        }
+        const coverage = present / expected;
+        if (coverage < 0.85 || !(maxV - minV > 0)) continue;
+
+        // Interpolate small internal missing samples linearly
+        let lastValidIdx = -1;
+        for (let k = 0; k < totalSpanSamples; k++) {
+          if (mask[k]) {
+            if (lastValidIdx >= 0 && k - lastValidIdx > 1) {
+              const vA = data[lastValidIdx], vB = data[k];
+              const gap = k - lastValidIdx;
+              for (let g = 1; g < gap; g++) data[lastValidIdx + g] = vA + ((vB - vA) * g) / gap;
+            } else if (lastValidIdx < 0 && k > 0) {
+              data.fill(data[k], 0, k);
+            }
+            lastValidIdx = k;
+          }
+        }
+        if (lastValidIdx >= 0 && lastValidIdx < totalSpanSamples - 1) {
+          data.fill(data[lastValidIdx], lastValidIdx + 1);
+        }
+
+        const { net, sta, loc, cha } = recs[0];
+        let score = coverage * 50;
+        if (preferredCha && cha === preferredCha) score += 30;
+        if (preferredLoc !== undefined && loc === preferredLoc) score += 15;
+        if (cha === 'BHZ') score += 20;
+        else if (cha === 'HHZ') score += 16;
+        else if (cha.endsWith('Z')) score += 10;
+        if (loc === '00') score += 8;
+        else if (loc === '') score += 5;
+
+        if (score > bestScore) {
+          bestScore = score;
+          best = { net, sta, loc, cha, fs, startTimeMs: firstMs, data };
+        }
+      }
+      return best;
+    }
+
+    // ---- Signal Processing (Detrend + Cosine Taper + Zero-Phase Butterworth) --------
+    function detrendLinearInPlace(arr) {
+      const n = arr.length;
+      if (n < 2) return arr;
+      let sx = 0, sy = 0, sxx = 0, sxy = 0;
+      const mid = (n - 1) * 0.5;
+      for (let i = 0; i < n; i++) {
+        const x = i - mid;
+        const y = arr[i];
+        sx += x;
+        sy += y;
+        sxx += x * x;
+        sxy += x * y;
+      }
+      const meanY = sy / n;
+      const slope = sxx > 0 ? sxy / sxx : 0;
+      for (let i = 0; i < n; i++) {
+        arr[i] -= meanY + slope * (i - mid);
+      }
+      return arr;
+    }
+
+    function cosineTaperInPlace(arr, frac = 0.05) {
+      const m = Math.floor(arr.length * frac);
+      if (m < 2) return arr;
+      for (let i = 0; i < m; i++) {
+        const w = 0.5 * (1 - Math.cos((Math.PI * i) / m));
+        arr[i] *= w;
+        arr[arr.length - 1 - i] *= w;
+      }
+      return arr;
+    }
+
+    function biquadCoeffs(fc, fs, type) {
+      const k = Math.tan((Math.PI * fc) / fs);
+      const norm = 1 / (1 + Math.SQRT2 * k + k * k);
+      const b0 = type === 'lp' ? k * k * norm : norm;
+      const b1 = type === 'lp' ? 2 * b0 : -2 * b0;
+      const b2 = b0;
+      const a1 = 2 * (k * k - 1) * norm;
+      const a2 = (1 - Math.SQRT2 * k + k * k) * norm;
+      return [b0, b1, b2, a1, a2];
+    }
+
+    function runBiquad(src, coeffs, reverse = false) {
+      const [b0, b1, b2, a1, a2] = coeffs;
+      const n = src.length;
+      const dst = new Float64Array(n);
+      let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+      if (!reverse) {
+        for (let i = 0; i < n; i++) {
+          const x = src[i];
+          const y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+          dst[i] = y;
+          x2 = x1; x1 = x;
+          y2 = y1; y1 = y;
+        }
+      } else {
+        for (let i = n - 1; i >= 0; i--) {
+          const x = src[i];
+          const y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+          dst[i] = y;
+          x2 = x1; x1 = x;
+          y2 = y1; y1 = y;
+        }
+      }
+      return dst;
+    }
+
+    function conditionTrace(stream, winStartMs, winEndMs, distDeg, mode) {
+      const { fs, startTimeMs, data } = stream;
+      let fLo = 0.6, fHi = 2.2;
+      if (distDeg < 4) { fLo = 1.0; fHi = 6.0; }
+      else if (distDeg < 25) { fLo = 0.7; fHi = 4.0; }
+
+      fHi = Math.min(fHi, fs * 0.42);
+      fLo = Math.min(fLo, fHi * 0.42);
+
+      let work = Float64Array.from(data);
+      detrendLinearInPlace(work);
+
+      let bandLabel = 'raw detrended';
+      if (mode === 'bp' && fs >= 3.0 && fHi > fLo * 1.3) {
+        cosineTaperInPlace(work, 0.04);
+        const hp = biquadCoeffs(fLo, fs, 'hp');
+        const lp = biquadCoeffs(fHi, fs, 'lp');
+        work = runBiquad(work, hp, false);
+        work = runBiquad(work, lp, false);
+        work = runBiquad(work, hp, true);
+        work = runBiquad(work, lp, true);
+        bandLabel = `${fLo.toFixed(1)}–${fHi.toFixed(1)} Hz`;
+      }
+
+      const i0 = Math.max(0, Math.round(((winStartMs - startTimeMs) / 1000) * fs));
+      const i1 = Math.min(work.length, Math.round(((winEndMs - startTimeMs) / 1000) * fs));
+      const slice = work.slice(i0, i1);
+      if (mode === 'raw') detrendLinearInPlace(slice);
+
+      // Compute pre-arrival noise RMS in [-10s .. -1.5s] and peak amplitude
+      const preEnd = Math.min(slice.length, Math.max(10, Math.floor(8.5 * fs)));
+      let sumSq = 0;
+      for (let i = 0; i < preEnd; i++) sumSq += slice[i] * slice[i];
+      const noiseRms = Math.sqrt(sumSq / Math.max(1, preEnd));
+
+      let maxAbs = 0;
+      for (let i = 0; i < slice.length; i++) {
+        const a = Math.abs(slice[i]);
+        if (a > maxAbs) maxAbs = a;
+      }
+      if (!(maxAbs > 0)) maxAbs = 1;
+
+      const norm = new Float64Array(slice.length);
+      for (let i = 0; i < slice.length; i++) norm[i] = slice[i] / maxAbs;
+
+      return {
+        samples: norm,
+        fs,
+        noiseRatio: Math.min(0.45, noiseRms / maxAbs),
+        snr: noiseRms > 0 ? maxAbs / noiseRms : 99,
+        bandLabel,
+      };
+    }
+
+    // ---- USGS NEIC Catalog + QuakeML Parsing ----------------------------------------
+    function firstText(parent, localName) {
+      if (!parent) return null;
+      const list = parent.getElementsByTagNameNS('*', localName);
+      return list.length ? list[0].textContent.trim() : null;
+    }
+
+    function parseNeicQuakeML(xmlText) {
+      const doc = new DOMParser().parseFromString(xmlText, 'application/xml');
+      const events = doc.getElementsByTagNameNS('*', 'event');
+      if (!events.length) return null;
+      const ev = events[0];
+
+      const prefOrigId = firstText(ev, 'preferredOriginID');
+      const origins = Array.from(ev.getElementsByTagNameNS('*', 'origin'));
+      if (!origins.length) return null;
+      const origin =
+        origins.find((o) => o.getAttribute('publicID') === prefOrigId && o.getElementsByTagNameNS('*', 'arrival').length > 0) ||
+        origins.find((o) => o.getElementsByTagNameNS('*', 'arrival').length > 0) ||
+        origins[0];
+
+      // Map all <pick> elements by publicID
+      const pickMap = new Map();
+      const picks = ev.getElementsByTagNameNS('*', 'pick');
+      for (let i = 0; i < picks.length; i++) {
+        const p = picks[i];
+        const pubId = p.getAttribute('publicID');
+        const wf = p.getElementsByTagNameNS('*', 'waveformID')[0];
+        const timeEl = p.getElementsByTagNameNS('*', 'time')[0];
+        const tStr = firstText(timeEl, 'value');
+        if (!pubId || !wf || !tStr) continue;
+        const net = (wf.getAttribute('networkCode') || '').trim();
+        const sta = (wf.getAttribute('stationCode') || '').trim();
+        let loc = (wf.getAttribute('locationCode') || '').trim();
+        if (loc === '--') loc = '';
+        const cha = (wf.getAttribute('channelCode') || '').trim();
+        const tMs = Date.parse(tStr);
+        if (!net || !sta || !Number.isFinite(tMs)) continue;
+        pickMap.set(pubId, {
+          net, sta, loc, cha, tMs,
+          phaseHint: firstText(p, 'phaseHint') || '',
+        });
+      }
+
+      const candidates = [];
+      const seenSta = new Set();
+      const arrivals = origin.getElementsByTagNameNS('*', 'arrival');
+      for (let i = 0; i < arrivals.length; i++) {
+        const arr = arrivals[i];
+        const pickId = firstText(arr, 'pickID');
+        const pk = pickMap.get(pickId);
+        if (!pk) continue;
+        if (BLOCKED_NETS.has(pk.net)) continue;
+        if (pk.cha && !/^[BHSE][HN]/i.test(pk.cha)) continue;
+
+        const phase = (firstText(arr, 'phase') || pk.phaseHint || '').trim();
+        if (!/^P(n|g|b|diff|KP|KIKP|KPbc|KPab)?$/i.test(phase)) continue;
+
+        const distDeg = parseFloat(firstText(arr, 'distance') || 'NaN');
+        const azDeg = parseFloat(firstText(arr, 'azimuth') || 'NaN');
+        if (!Number.isFinite(distDeg) || distDeg <= 0.05 || distDeg > 165) continue;
+
+        const staKey = `${pk.net}.${pk.sta}`;
+        if (seenSta.has(staKey)) continue;
+        seenSta.add(staKey);
+
+        let tier = 3;
+        if (TIER1_NETS.has(pk.net)) tier = 1;
+        else if (TIER2_NETS.has(pk.net)) tier = 2;
+
+        // Prefer Tier-1 open stations at crisp regional/teleseismic distances
+        const distPenalty = distDeg > 85 ? (distDeg - 85) * 0.4 : distDeg * 0.08;
+        const score = (4 - tier) * 25 - distPenalty + (Math.random() * 6);
+        candidates.push({
+          ...pk,
+          phase: phase || 'P',
+          distDeg,
+          azDeg: Number.isFinite(azDeg) ? azDeg : 0,
+          tier,
+          score,
+        });
+      }
+
+      candidates.sort((a, b) => b.score - a.score);
+      return candidates;
+    }
+
+    async function loadRecentCatalog() {
+      if (state.catalog && state.catalog.length >= 6) return state.catalog;
+      const urls = [
+        'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&catalog=us&minmagnitude=4.3&limit=45&orderby=time',
+        'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson',
+      ];
+      for (const u of urls) {
+        try {
+          const data = await fetchWithTimeout(u, 9000, 'json');
+          if (data && Array.isArray(data.features) && data.features.length) {
+            const usable = data.features.filter((f) =>
+              f && f.id && f.geometry && Array.isArray(f.geometry.coordinates) && f.properties && f.properties.mag >= 4.0
+            );
+            if (usable.length) {
+              state.catalog = usable;
+              return usable;
+            }
+          }
+        } catch (_) {
+          // try backup feed
+        }
+      }
+      throw new Error('Could not reach USGS NEIC catalog');
+    }
+
+    async function fetchQuakeMLCandidates(feature) {
+      const eventId = feature.id;
+      try {
+        const xml = await fetchWithTimeout(
+          `https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=${encodeURIComponent(eventId)}&includearrivals=true`,
+          8500,
+          'text'
+        );
+        if (xml) {
+          const cands = parseNeicQuakeML(xml);
+          if (cands && cands.length) return cands;
+        }
+      } catch (_) {
+        // fallback to detail GeoJSON product URL
+      }
+
+      if (feature.properties && feature.properties.detail) {
+        const detail = await fetchWithTimeout(feature.properties.detail, 7500, 'json');
+        const phaseProds = detail?.properties?.products?.['phase-data'];
+        const qmlUrl = phaseProds?.[0]?.contents?.['quakeml.xml']?.url;
+        if (qmlUrl) {
+          const xml = await fetchWithTimeout(qmlUrl, 8500, 'text');
+          if (xml) return parseNeicQuakeML(xml) || [];
+        }
+      }
+      return [];
+    }
+
+    function parseStationText(txt) {
+      if (!txt) return null;
+      const lines = txt.split(/\r?\n/);
+      for (const ln of lines) {
+        if (!ln || ln.startsWith('#')) continue;
+        const parts = ln.split('|');
+        if (parts.length >= 6) {
+          const lat = parseFloat(parts[2]);
+          const lon = parseFloat(parts[3]);
+          const elev = parseFloat(parts[4]);
+          const site = parts[5].trim();
+          if (Number.isFinite(lat) && Number.isFinite(lon)) {
+            return { lat, lon, elev, site };
+          }
+        }
+      }
+      return null;
+    }
+
+    async function fetchStationBundle(evInfo, cand) {
+      // Display window: [t_pick - 10s, t_pick + postSec]
+      const preSec = 10;
+      const postSec = cand.distDeg <= 12
+        ? Math.round(Math.max(40, Math.min(105, cand.distDeg * 10.5 + 18)))
+        : 70;
+
+      const winStartMs = cand.tMs - preSec * 1000;
+      const winEndMs = cand.tMs + postSec * 1000;
+
+      // Extra padding on each side so zero-phase Butterworth tapers stay outside display window
+      const padStartIso = new Date(winStartMs - 12000).toISOString().replace('.000Z', '');
+      const padEndIso = new Date(winEndMs + 10000).toISOString().replace('.000Z', '');
+
+      const chaList = ['BHZ', 'HHZ', 'SHZ', 'EHZ'];
+      if (cand.cha && !chaList.includes(cand.cha) && cand.cha.endsWith('Z')) {
+        chaList.unshift(cand.cha);
+      }
+      const chaParam = chaList.join(',');
+
+      const fdsnBases = cand.net === 'GE'
+        ? ['https://service.earthscope.org', 'https://geofon.gfz.de']
+        : ['https://service.earthscope.org'];
+
+      for (const base of fdsnBases) {
+        const wfUrl = `${base}/fdsnws/dataselect/1/query?net=${encodeURIComponent(cand.net)}&sta=${encodeURIComponent(cand.sta)}&loc=*&cha=${encodeURIComponent(chaParam)}&starttime=${padStartIso}&endtime=${padEndIso}&nodata=204`;
+        const stUrl = `${base}/fdsnws/station/1/query?net=${encodeURIComponent(cand.net)}&sta=${encodeURIComponent(cand.sta)}&level=station&format=text&nodata=204`;
+
+        try {
+          const [mseedBuf, staTxt] = await Promise.all([
+            fetchWithTimeout(wfUrl, 8500, 'arrayBuffer'),
+            fetchWithTimeout(stUrl, 5500, 'text').catch(() => null),
+          ]);
+          if (!mseedBuf || mseedBuf.byteLength < 128) continue;
+
+          const records = decodeMiniSeed(mseedBuf);
+          const stream = assembleStream(records, cand.cha, cand.loc, winStartMs, winEndMs);
+          if (!stream) continue;
+
+          const staMeta = parseStationText(staTxt);
+          let staLat, staLon, siteName = '';
+          if (staMeta) {
+            staLat = staMeta.lat;
+            staLon = staMeta.lon;
+            siteName = staMeta.site;
+          } else {
+            [staLat, staLon] = reckonLatLon(evInfo.lat, evInfo.lon, cand.distDeg, cand.azDeg);
+          }
+
+          const geo = angularDistAz(evInfo.lat, evInfo.lon, staLat, staLon);
+          return {
+            event: evInfo,
+            pick: {
+              ...cand,
+              distDeg: geo.distDeg || cand.distDeg,
+              azDeg: geo.azDeg || cand.azDeg,
+            },
+            station: {
+              net: stream.net,
+              sta: stream.sta,
+              loc: stream.loc,
+              cha: stream.cha,
+              lat: staLat,
+              lon: staLon,
+              site: siteName,
+            },
+            stream,
+            winStartMs,
+            winEndMs,
+            preSec,
+            postSec,
+          };
+        } catch (_) {
+          // try next base or candidate station
+        }
+      }
+      return null;
+    }
+
+    async function pullRandomSeismogram() {
+      if (state.loading) return;
+      state.loading = true;
+      btnRoll.disabled = true;
+      btnFilter.disabled = true;
+
+      try {
+        setStatus('→ querying neic recent catalog…', true);
+        const [catalog] = await Promise.all([
+          loadRecentCatalog(),
+          ensureWorldMap(),
+        ]);
+
+        // Shuffle unseen events first
+        let pool = catalog.filter((f) => !state.seenIds.has(f.id));
+        if (!pool.length) {
+          state.seenIds.clear();
+          pool = catalog.slice();
+        }
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]];
+        }
+
+        const maxEventsToTry = Math.min(6, pool.length);
+        for (let eIdx = 0; eIdx < maxEventsToTry; eIdx++) {
+          const feat = pool[eIdx];
+          const [lon, lat, depthKm] = feat.geometry.coordinates;
+          const evInfo = {
+            id: feat.id,
+            mag: feat.properties.mag,
+            magType: feat.properties.magType || 'M',
+            place: feat.properties.place || 'Unknown region',
+            timeMs: feat.properties.time,
+            url: feat.properties.url || `https://earthquake.usgs.gov/earthquakes/eventpage/${feat.id}/executive`,
+            lat,
+            lon,
+            depthKm: depthKm ?? 10,
+          };
+
+          setStatus(`→ ${evInfo.id} (M${evInfo.mag.toFixed(1)}) · fetching neic phase picks…`, true);
+          let candidates = [];
+          try {
+            candidates = await fetchQuakeMLCandidates(feat);
+          } catch (_) {
+            continue;
+          }
+          if (!candidates.length) continue;
+
+          // Shuffle lightly among top 5 open picks so repeated pulls feel alive
+          const topCount = Math.min(5, candidates.length);
+          const head = candidates.slice(0, topCount);
+          for (let i = head.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [head[i], head[j]] = [head[j], head[i]];
+          }
+          const ordered = head.concat(candidates.slice(topCount, 9));
+
+          for (let cIdx = 0; cIdx < Math.min(5, ordered.length); cIdx++) {
+            const cand = ordered[cIdx];
+            setStatus(`→ ${evInfo.id} · pulling ${cand.net}.${cand.sta} [${cand.phase} − 10s]…`, true);
+            const bundle = await fetchStationBundle(evInfo, cand);
+            if (bundle) {
+              state.seenIds.add(evInfo.id);
+              state.pullCount += 1;
+              activateBundle(bundle, true);
+              return;
+            }
+          }
+        }
+        throw new Error('No open station waveforms returned on this roll — try another');
+      } catch (err) {
+        setStatus(`! ${err.message || 'Fetch failed'} — hit [another ↻] to retry`, false);
+      } finally {
+        state.loading = false;
+        btnRoll.disabled = false;
+        if (state.current) btnFilter.disabled = false;
+      }
+    }
+
+    // ---- HUD Update & Sweep Animation -----------------------------------------------
+    function formatLatLon(lat, lon) {
+      const ns = lat >= 0 ? 'N' : 'S';
+      const ew = lon >= 0 ? 'E' : 'W';
+      return `${Math.abs(lat).toFixed(2)}°${ns}, ${Math.abs(lon).toFixed(2)}°${ew}`;
+    }
+
+    function formatUtc(ms) {
+      return new Date(ms).toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    }
+
+    function activateBundle(bundle, animateSweep) {
+      bundle.conditioned = conditionTrace(
+        bundle.stream,
+        bundle.winStartMs,
+        bundle.winEndMs,
+        bundle.pick.distDeg,
+        state.filterMode
+      );
+      state.current = bundle;
+
+      const { event: ev, station: st, pick, conditioned, preSec, postSec } = bundle;
+      const distKm = Math.round(pick.distDeg * 111.195);
+      const travelSec = ((pick.tMs - ev.timeMs) / 1000).toFixed(1);
+      const chanCode = [st.net, st.sta, st.loc || '--', st.cha].join('.');
+      const sitePart = st.site ? ` (${st.site.split(',')[0].trim()})` : '';
+
+      elTitle.textContent = `M ${ev.mag.toFixed(1)} — ${ev.place}`;
+      elMeta.innerHTML =
+        `<strong>${ev.id}</strong> · ${formatUtc(ev.timeMs)} · ${formatLatLon(ev.lat, ev.lon)} · depth ${ev.depthKm.toFixed(1)} km<br>` +
+        `station <strong>${chanCode}</strong>${escapeHtml(sitePart)} · Δ ${pick.distDeg.toFixed(1)}° (${distKm.toLocaleString()} km) · ${pick.phase} +${travelSec}s<br>` +
+        `window [${pick.phase} − ${preSec}s .. +${postSec}s] · ${conditioned.fs.toFixed(0)} Hz · ${conditioned.bandLabel} · binary 0/1`;
+
+      elUsgsLink.href = ev.url;
+      elUsgsLink.hidden = false;
+      btnFilter.disabled = false;
+      btnFilter.textContent = state.filterMode === 'bp' ? 'filter: bandpass' : 'filter: raw';
+
+      if (state.pullCount >= 4) {
+        elWhisper.hidden = false;
+        elWhisper.textContent = `pull #${state.pullCount} · attention is a precious commodity`;
+      } else {
+        elWhisper.hidden = true;
+      }
+
+      setStatus('', false);
+
+      cancelAnimationFrame(state.animFrame);
+      if (animateSweep && !reducedMotionQuery.matches) {
+        const t0 = performance.now();
+        const dur = 1050;
+        state.sweepProgress = 0;
+        const step = (now) => {
+          const p = Math.min(1, (now - t0) / dur);
+          state.sweepProgress = p;
+          renderScene();
+          if (p < 1) state.animFrame = requestAnimationFrame(step);
+        };
+        state.animFrame = requestAnimationFrame(step);
+      } else {
+        state.sweepProgress = 1;
+        renderScene();
+      }
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+      }[c]));
+    }
+
+    // ---- Canvas Rendering: Greyscale Map + Binary Waveform Superposition ------------
+    function renderScene() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) {
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+      }
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      const pal = getPalette();
+
+      // Clear background
+      ctx.fillStyle = pal.bg;
+      ctx.fillRect(0, 0, W, H);
+
+      if (!state.current) {
+        drawIdleBackdrop(W, H, pal);
+        ctx.restore();
+        return;
+      }
+
+      const { event: ev, station: st, pick, conditioned, preSec, postSec } = state.current;
+      const minDim = Math.min(W, H);
+
+      // Center projection on midpoint of Event <-> Station great-circle arc
+      const arcVecs = slerpGreatCircle(ev.lat, ev.lon, st.lat, st.lon, 101);
+      const midVec = arcVecs[50];
+      const [midLat, midLon] = vecToLatLon(midVec);
+
+      // Dynamic zoom: full hemisphere for teleseismic, smooth zoom for regional
+      const halfSpanRad = Math.max(2.0, pick.distDeg * 0.5) * DEG;
+      const halfChord = Math.sin(halfSpanRad * 0.5) * Math.SQRT2;
+      const desiredScreenHalf = minDim * 0.24;
+      const R = Math.max(minDim * 0.43, Math.min(minDim * 4.2, desiredScreenHalf / Math.max(0.025, halfChord)));
+
+      const mapCx = W * 0.5;
+      const mapCy = H * 0.5;
+      const proj = makeProjector(midLat, midLon, mapCx, mapCy, R);
+
+      // 1. Greyscale Globe / Map Layer
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(mapCx, mapCy, R, 0, Math.PI * 2);
+      ctx.fillStyle = pal.sphereFill;
+      ctx.fill();
+      ctx.clip();
+
+      // Graticule (adaptive 5, 10, or 15 deg)
+      const gratStep = R > minDim * 1.6 ? 5 : R > minDim * 0.9 ? 10 : 15;
+      drawGraticule(proj, gratStep, pal);
+
+      // Filled countries (guaranteed <90deg span each -> artifact-free back-hemisphere culling)
+      if (state.world && state.world.countries.length) {
+        ctx.fillStyle = pal.landFill;
+        ctx.strokeStyle = pal.countryStroke;
+        ctx.lineWidth = 0.5;
+        for (const ring of state.world.countries) {
+          let maxCos = -1;
+          for (let i = 0; i < ring.length; i += 3) {
+            const [, , c] = proj(ring[i]);
+            if (c > maxCos) maxCos = c;
+          }
+          if (maxCos < -0.03) continue;
+
+          ctx.beginPath();
+          for (let i = 0; i < ring.length; i++) {
+            const [x, y] = proj(ring[i]);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+
+      // Crisp coastlines (front hemisphere strokes)
+      if (state.world && state.world.land.length) {
+        ctx.strokeStyle = pal.landStroke;
+        ctx.lineWidth = 0.85;
+        ctx.beginPath();
+        for (const ring of state.world.land) {
+          let penDown = false;
+          for (let i = 0; i < ring.length; i++) {
+            const [x, y, cosC] = proj(ring[i]);
+            if (cosC >= -0.02) {
+              if (!penDown) { ctx.moveTo(x, y); penDown = true; }
+              else ctx.lineTo(x, y);
+            } else {
+              penDown = false;
+            }
+          }
+        }
+        ctx.stroke();
+      }
+
+      // Concentric epicentral wavefront rings
+      const ringStep = pick.distDeg < 10 ? 2 : pick.distDeg < 30 ? 5 : 15;
+      ctx.strokeStyle = pal.ring;
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([3, 5]);
+      for (let d = ringStep; d <= Math.min(150, Math.max(pick.distDeg * 1.35, ringStep * 3)); d += ringStep) {
+        drawSphereCurve(proj, smallCircleVecs(ev.lat, ev.lon, d, 120));
+      }
+      ctx.setLineDash([]);
+
+      // Great-circle ray path (Epicenter -> Station)
+      ctx.strokeStyle = pal.rayPath;
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([5, 4]);
+      drawSphereCurve(proj, arcVecs);
+      ctx.setLineDash([]);
+
+      ctx.restore();
+
+      // Globe limb outline (visible when full globe fits on screen)
+      ctx.beginPath();
+      ctx.arc(mapCx, mapCy, R, 0, Math.PI * 2);
+      ctx.strokeStyle = pal.limb;
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      // 2. Binary Waveform Superposition Layer
+      const traceCy = H * 0.53;
+      drawBinaryWaveform(W, H, traceCy, conditioned, pick, preSec, postSec, ev.id, pal);
+
+      // 3. Epicenter & Station Map Markers + Crisp Monospace Callouts (drawn clearly above map)
+      const [ex, ey] = proj(latLonToVec(ev.lat, ev.lon));
+      const [sx, sy] = proj(latLonToVec(st.lat, st.lon));
+      drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, pal);
+
+      ctx.restore();
+    }
+
+    function drawIdleBackdrop(W, H, pal) {
+      const minDim = Math.min(W, H);
+      const R = minDim * 0.41;
+      const proj = makeProjector(20, 0, W * 0.5, H * 0.5, R);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(W * 0.5, H * 0.5, R, 0, Math.PI * 2);
+      ctx.fillStyle = pal.sphereFill;
+      ctx.fill();
+      ctx.clip();
+      drawGraticule(proj, 15, pal);
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.arc(W * 0.5, H * 0.5, R, 0, Math.PI * 2);
+      ctx.strokeStyle = pal.limb;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    function drawGraticule(proj, stepDeg, pal) {
+      ctx.strokeStyle = pal.graticule;
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      for (let lon = -180; lon < 180; lon += stepDeg) {
+        let pen = false;
+        for (let lat = -85; lat <= 85; lat += 2.5) {
+          const [x, y, c] = proj(latLonToVec(lat, lon));
+          if (c >= 0) {
+            if (!pen) { ctx.moveTo(x, y); pen = true; }
+            else ctx.lineTo(x, y);
+          } else pen = false;
+        }
+      }
+      for (let lat = -90 + stepDeg; lat <= 90 - stepDeg; lat += stepDeg) {
+        let pen = false;
+        for (let lon = -180; lon <= 180; lon += 2.5) {
+          const [x, y, c] = proj(latLonToVec(lat, lon));
+          if (c >= 0) {
+            if (!pen) { ctx.moveTo(x, y); pen = true; }
+            else ctx.lineTo(x, y);
+          } else pen = false;
+        }
+      }
+      ctx.stroke();
+    }
+
+    function drawSphereCurve(proj, vecs) {
+      ctx.beginPath();
+      let pen = false;
+      for (let i = 0; i < vecs.length; i++) {
+        const [x, y, c] = proj(vecs[i]);
+        if (c >= -0.01) {
+          if (!pen) { ctx.moveTo(x, y); pen = true; }
+          else ctx.lineTo(x, y);
+        } else pen = false;
+      }
+      ctx.stroke();
+    }
+
+    function drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, pal) {
+      ctx.font = "bold 11.5px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace";
+      ctx.textBaseline = 'middle';
+
+      // Epicenter bullseye
+      for (const r of [14, 8]) {
+        ctx.beginPath();
+        ctx.arc(ex, ey, r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${pal.inkRgb}, ${r === 8 ? 0.65 : 0.32})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.arc(ex, ey, 3.6, 0, Math.PI * 2);
+      ctx.fillStyle = pal.ink;
+      ctx.fill();
+
+      const evLabel = `◎ M${ev.mag.toFixed(1)} · ${ev.depthKm.toFixed(0)}km`;
+      drawCalloutTag(ex, ey, evLabel, ey < traceCy ? -20 : 20, pal);
+
+      // Station seismometer triangle ▲
+      const tri = 6.5;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy - tri);
+      ctx.lineTo(sx - tri * 0.92, sy + tri * 0.78);
+      ctx.lineTo(sx + tri * 0.92, sy + tri * 0.78);
+      ctx.closePath();
+      ctx.fillStyle = pal.markerFill;
+      ctx.fill();
+      ctx.strokeStyle = pal.ink;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      const stLabel = `▲ ${st.net}.${st.sta} · Δ${pick.distDeg.toFixed(1)}°`;
+      drawCalloutTag(sx, sy, stLabel, sy < traceCy ? -20 : 20, pal);
+    }
+
+    function drawCalloutTag(x, y, text, dy, pal) {
+      const padX = 6;
+      const h = 19;
+      const w = ctx.measureText(text).width + padX * 2;
+      const bx = Math.max(12, Math.min(window.innerWidth - w - 12, x - w * 0.5));
+      const by = y + dy - h * 0.5;
+
+      ctx.fillStyle = `rgba(${pal.bgRgb}, 0.82)`;
+      ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.35)`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, w, h, 4);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = pal.ink;
+      ctx.fillText(text, bx + padX, by + h * 0.5 + 0.5);
+    }
+
+    function drawBinaryWaveform(W, H, cy, conditioned, pick, preSec, postSec, seedStr, pal) {
+      const { samples, fs, noiseRatio } = conditioned;
+      const totalSec = preSec + postSec;
+      const xPad = W < 640 ? 18 : 48;
+      const traceW = Math.max(120, W - xPad * 2);
+      const maxAmpPx = Math.min(H * 0.25, 195);
+
+      const fontSize = W < 640 ? 9.2 : 10.5;
+      const charW = fontSize * 0.62;
+      const lineH = Math.round(fontSize * 1.08);
+      const cols = Math.max(24, Math.floor(traceW / charW));
+      const maxRowsHalf = Math.max(6, Math.floor(maxAmpPx / lineH));
+      const visibleCols = Math.ceil(cols * state.sweepProgress);
+
+      const xLeft = (W - cols * charW) * 0.5;
+      const xPick = xLeft + (preSec / totalSec) * (cols * charW);
+
+      // Zero-axis baseline & arrival phase marker
+      ctx.strokeStyle = pal.baseline;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(xLeft, cy);
+      ctx.lineTo(xLeft + cols * charW, cy);
+      ctx.stroke();
+
+      // NEIC P arrival vertical hairline at t = 0.0 s (10 s from start)
+      ctx.save();
+      ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.45)`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(xPick, cy - maxAmpPx - 22);
+      ctx.lineTo(xPick, cy + maxAmpPx + 18);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = `bold 11px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
+      ctx.fillStyle = pal.ink;
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(`${pick.phase} · 0.0s`, xPick + 5, cy - maxAmpPx - 8);
+
+      // Approximate S arrival guide if inside window (t_S - t_P ≈ 0.73 * travel_P for Poisson solid)
+      const travelPSec = (pick.tMs - state.current.event.timeMs) / 1000;
+      const approxSOffsetSec = travelPSec * 0.73;
+      if (travelPSec > 3 && approxSOffsetSec > 6 && approxSOffsetSec < postSec - 4) {
+        const xS = xLeft + ((preSec + approxSOffsetSec) / totalSec) * (cols * charW);
+        ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.25)`;
+        ctx.setLineDash([2, 4]);
+        ctx.beginPath();
+        ctx.moveTo(xS, cy - maxAmpPx * 0.85);
+        ctx.lineTo(xS, cy + maxAmpPx * 0.85);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = pal.muted;
+        ctx.fillText(`~S · +${approxSOffsetSec.toFixed(0)}s`, xS + 5, cy - maxAmpPx * 0.85 + 10);
+      }
+      ctx.restore();
+
+      // Fine continuous greyscale seismogram polyline underneath the binary digits
+      const revealSamples = Math.floor(samples.length * state.sweepProgress);
+      if (revealSamples > 1) {
+        ctx.save();
+        ctx.strokeStyle = pal.traceLine;
+        ctx.lineWidth = 1.05;
+        ctx.beginPath();
+        const stride = Math.max(1, Math.floor(samples.length / (traceW * 2.5)));
+        for (let i = 0; i < revealSamples; i += stride) {
+          const x = xLeft + (i / (samples.length - 1)) * (cols * charW);
+          const y = cy - samples[i] * maxAmpPx;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Binary 0 / 1 waveform field (homage to build_portrait.py)
+      const baseSeed = hashSeed(seedStr);
+      const onsetThresh = Math.max(0.08, Math.min(0.20, noiseRatio * 2.8));
+
+      ctx.save();
+      ctx.font = `${fontSize.toFixed(1)}px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      for (let c = 0; c < visibleCols; c++) {
+        const rng = mulberry32(baseSeed ^ Math.imul(c + 1, 2654435761));
+        const s0 = Math.floor((c / cols) * samples.length);
+        const s1 = Math.max(s0 + 1, Math.floor(((c + 1) / cols) * samples.length));
+        let vMin = Infinity, vMax = -Infinity, peakAbs = 0;
+        for (let s = s0; s < s1 && s < samples.length; s++) {
+          const v = samples[s];
+          if (v < vMin) vMin = v;
+          if (v > vMax) vMax = v;
+          const av = Math.abs(v);
+          if (av > peakAbs) peakAbs = av;
+        }
+        if (!Number.isFinite(vMin)) continue;
+
+        // Screen row indices relative to cy (upward sample > 0 -> negative row index)
+        const rTop = Math.round((-vMax * maxAmpPx) / lineH);
+        const rBot = Math.round((-vMin * maxAmpPx) / lineH);
+        const envTop = Math.min(rTop, 0);
+        const envBot = Math.max(rBot, 0);
+        const maxExcur = Math.max(1, Math.abs(rTop), Math.abs(rBot));
+        const haloPad = peakAbs > onsetThresh ? 2 : (peakAbs > 0.03 ? 1 : 0);
+
+        const cx = xLeft + (c + 0.5) * charW;
+
+        for (let r = envTop - haloPad; r <= envBot + haloPad; r++) {
+          if (r < -maxRowsHalf - 2 || r > maxRowsHalf + 2) continue;
+
+          const onRidge = r >= rTop && r <= rBot;
+          const atCrest = Math.abs(r - rTop) <= 1 || Math.abs(r - rBot) <= 1;
+          const insideLobe = r >= envTop && r <= envBot;
+          let ch = '0';
+          let alpha = 0;
+
+          if (onRidge) {
+            if (peakAbs > onsetThresh) {
+              const relRow = Math.abs(r) / maxExcur;
+              ch = atCrest || relRow > 0.45 ? '1' : (rng() < 0.7 ? '1' : '0');
+              alpha = atCrest
+                ? Math.min(0.98, 0.62 + Math.pow(peakAbs, 0.85) * 0.38)
+                : Math.min(0.82, 0.38 + relRow * 0.42);
+            } else {
+              // Quiet pre-arrival [-10s .. 0s] noise floor reads as crisp faint 0s
+              ch = '0';
+              alpha = 0.42;
+            }
+          } else if (insideLobe) {
+            const lobeSpan = Math.max(1, r < 0 ? -rTop : rBot);
+            const rel = Math.abs(r) / lobeSpan;
+            const strength = peakAbs * (0.30 + 0.70 * rel);
+            ch = strength > 0.36 && rng() < 0.55 ? '1' : '0';
+            alpha = Math.max(0.14, Math.min(0.66, Math.pow(strength, 1.08) * 0.70));
+          } else {
+            // Exponential edge bleed like build_portrait.py
+            const dist = r < envTop ? envTop - r : r - envBot;
+            const bleed = peakAbs * Math.exp(-dist / 1.15) * (0.35 + 0.65 * rng());
+            if (bleed < 0.10) continue;
+            ch = bleed > 0.28 ? '1' : '0';
+            alpha = Math.min(0.36, bleed * 0.65);
+          }
+
+          const ry = cy + r * lineH;
+          if (alpha > 0.22) {
+            ctx.fillStyle = `rgba(${pal.bgRgb}, ${(alpha * 0.58).toFixed(2)})`;
+            ctx.fillRect(cx - charW * 0.48, ry - lineH * 0.46, charW * 0.96, lineH * 0.92);
+          }
+          ctx.fillStyle = `rgba(${pal.inkRgb}, ${alpha.toFixed(2)})`;
+          ctx.fillText(ch, cx, ry);
+        }
+      }
+
+      // Leading sweep cursor bar while drawing
+      if (state.sweepProgress < 1) {
+        const curX = xLeft + visibleCols * charW;
+        ctx.fillStyle = pal.ink;
+        ctx.fillRect(curX, cy - 11, charW * 0.85, 22);
+      }
+
+      // Time scale ticks along bottom of waveform band
+      const tickStep = totalSec <= 65 ? 10 : 20;
+      const tickY = cy + maxAmpPx + 22;
+      ctx.font = `11px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
+      ctx.fillStyle = pal.muted;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (let t = -preSec; t <= postSec; t += tickStep) {
+        const tx = xLeft + ((t + preSec) / totalSec) * (cols * charW);
+        ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.22)`;
+        ctx.beginPath();
+        ctx.moveTo(tx, tickY - 6);
+        ctx.lineTo(tx, tickY - 1);
+        ctx.stroke();
+        const lbl = t === 0 ? '0s' : t > 0 ? `+${t}s` : `${t}s`;
+        ctx.fillText(lbl, tx, tickY + 2);
+      }
+      ctx.restore();
+    }
+
+    // ---- Controls & Listeners -------------------------------------------------------
+    btnRoll.addEventListener('click', () => {
+      pullRandomSeismogram();
+    });
+
+    btnFilter.addEventListener('click', () => {
+      if (!state.current || state.loading) return;
+      state.filterMode = state.filterMode === 'bp' ? 'raw' : 'bp';
+      activateBundle(state.current, false);
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      if ((e.key === 'r' || e.key === 'R') && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        pullRandomSeismogram();
+      } else if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && state.current) {
+        e.preventDefault();
+        btnFilter.click();
+      }
+    });
+
+    window.addEventListener('resize', () => renderScene());
+    darkQuery.addEventListener('change', () => renderScene());
+
+    // Initial render + live NEIC pull
+    renderScene();
+    pullRandomSeismogram();
+  })();
+  </script>
+</body>
+</html>
