@@ -7,5 +7,5 @@
   <a href="https://lintel-libraries.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="links/libraries-dark.svg"><img src="links/libraries-light.svg" width="24%" alt="Libraries"></picture></a>
   <a href="stubs/launcher.md"><picture><source media="(prefers-color-scheme: dark)" srcset="links/launcher-dark.svg"><img src="links/launcher-light.svg" width="24%" alt="Launcher"></picture></a>
   <a href="stubs/discovery.md"><picture><source media="(prefers-color-scheme: dark)" srcset="links/discovery-dark.svg"><img src="links/discovery-light.svg" width="24%" alt="Discovery"></picture></a>
-  <a href="https://Perplexity.ai/Discover"><picture><source media="(prefers-color-scheme: dark)" srcset="links/random-dark.svg"><img src="links/random-light.svg" width="24%" alt="Random"></picture></a>
+  <a href="https://lintelligences.github.io/lintelligences/"><picture><source media="(prefers-color-scheme: dark)" srcset="links/random-dark.svg"><img src="links/random-light.svg" width="24%" alt="Random"></picture></a>
 </p>
