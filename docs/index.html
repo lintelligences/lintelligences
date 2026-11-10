@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Random · NEIC Binary Seismogram</title>
+  <title>Random · NEIC Live Seismogram</title>
   <style>
     @font-face {
       src: local('Consolas'), local('Consolas Bold');
@@ -231,7 +231,7 @@
   </style>
 </head>
 <body>
-  <canvas id="stage" aria-label="Greyscale world map with live NEIC earthquake waveform superimposed in binary digits"></canvas>
+  <canvas id="stage" aria-label="Greyscale world map with live NEIC earthquake waveform"></canvas>
 
   <header class="hud" id="hud">
     <div class="kicker" id="kicker">NEIC · RANDOM WAVEFORM</div>
@@ -256,7 +256,7 @@
   (() => {
     'use strict';
 
-    // ---- Palette (strictly greyscale, synced with OS light/dark theme) --------------
+    // ---- Palette (greyscale map + orange-red waveform, synced with OS theme) --------
     const PALETTES = {
       light: {
         bg: '#ffffff',
@@ -272,7 +272,8 @@
         ink: '#1f2328',
         inkRgb: '31, 35, 40',
         muted: '#57606a',
-        traceLine: 'rgba(31, 35, 40, 0.30)',
+        trace: '#e04622',
+        traceBacking: 'rgba(255, 255, 255, 0.62)',
         baseline: 'rgba(31, 35, 40, 0.16)',
         markerFill: '#ffffff',
       },
@@ -290,7 +291,8 @@
         ink: '#e6edf3',
         inkRgb: '230, 237, 243',
         muted: '#8b949e',
-        traceLine: 'rgba(230, 237, 243, 0.30)',
+        trace: '#ff5733',
+        traceBacking: 'rgba(13, 17, 23, 0.62)',
         baseline: 'rgba(230, 237, 243, 0.15)',
         markerFill: '#0d1117',
       },
@@ -1335,7 +1337,7 @@
       elMeta.innerHTML =
         `<strong>${ev.id}</strong> · ${formatUtc(ev.timeMs)} · ${formatLatLon(ev.lat, ev.lon)} · depth ${ev.depthKm.toFixed(1)} km<br>` +
         `station <strong>${chanCode}</strong>${escapeHtml(sitePart)} · Δ ${pick.distDeg.toFixed(1)}° (${distKm.toLocaleString()} km) · ${pick.phase} +${travelSec}s<br>` +
-        `window [${pick.phase} − ${preSec}s .. +${postSec}s] · ${conditioned.fs.toFixed(0)} Hz · ${conditioned.bandLabel} · binary 0/1`;
+        `window [${pick.phase} − ${preSec}s .. +${postSec}s] · ${conditioned.fs.toFixed(0)} Hz · ${conditioned.bandLabel}`;
 
       elUsgsLink.href = ev.url;
       elUsgsLink.hidden = false;
@@ -1500,9 +1502,9 @@
       ctx.lineWidth = 1.1;
       ctx.stroke();
 
-      // 2. Binary Waveform Superposition Layer
+      // 2. Waveform Superposition Layer (mid-weight orange-red trace)
       const traceCy = H * 0.53;
-      drawBinaryWaveform(W, H, traceCy, conditioned, pick, preSec, postSec, ev.id, pal);
+      drawWaveform(W, H, traceCy, conditioned, pick, preSec, postSec, pal);
 
       // 3. Epicenter & Station Map Markers + Crisp Monospace Callouts (drawn clearly above map)
       const [ex, ey] = proj(latLonToVec(ev.lat, ev.lon));
@@ -1628,29 +1630,21 @@
       ctx.fillText(text, bx + padX, by + h * 0.5 + 0.5);
     }
 
-    function drawBinaryWaveform(W, H, cy, conditioned, pick, preSec, postSec, seedStr, pal) {
-      const { samples, fs, noiseRatio } = conditioned;
+    function drawWaveform(W, H, cy, conditioned, pick, preSec, postSec, pal) {
+      const { samples } = conditioned;
       const totalSec = preSec + postSec;
       const xPad = W < 640 ? 18 : 48;
       const traceW = Math.max(120, W - xPad * 2);
       const maxAmpPx = Math.min(H * 0.25, 195);
+      const xLeft = (W - traceW) * 0.5;
+      const xPick = xLeft + (preSec / totalSec) * traceW;
 
-      const fontSize = W < 640 ? 9.2 : 10.5;
-      const charW = fontSize * 0.62;
-      const lineH = Math.round(fontSize * 1.08);
-      const cols = Math.max(24, Math.floor(traceW / charW));
-      const maxRowsHalf = Math.max(6, Math.floor(maxAmpPx / lineH));
-      const visibleCols = Math.ceil(cols * state.sweepProgress);
-
-      const xLeft = (W - cols * charW) * 0.5;
-      const xPick = xLeft + (preSec / totalSec) * (cols * charW);
-
-      // Zero-axis baseline & arrival phase marker
+      // Zero-axis datum hairline
       ctx.strokeStyle = pal.baseline;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(xLeft, cy);
-      ctx.lineTo(xLeft + cols * charW, cy);
+      ctx.lineTo(xLeft + traceW, cy);
       ctx.stroke();
 
       // NEIC P arrival vertical hairline at t = 0.0 s (10 s from start)
@@ -1665,7 +1659,7 @@
       ctx.setLineDash([]);
 
       ctx.font = `bold 11px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
-      ctx.fillStyle = pal.ink;
+      ctx.fillStyle = pal.trace;
       ctx.textBaseline = 'bottom';
       ctx.fillText(`${pick.phase} · 0.0s`, xPick + 5, cy - maxAmpPx - 8);
 
@@ -1673,7 +1667,7 @@
       const travelPSec = (pick.tMs - state.current.event.timeMs) / 1000;
       const approxSOffsetSec = travelPSec * 0.73;
       if (travelPSec > 3 && approxSOffsetSec > 6 && approxSOffsetSec < postSec - 4) {
-        const xS = xLeft + ((preSec + approxSOffsetSec) / totalSec) * (cols * charW);
+        const xS = xLeft + ((preSec + approxSOffsetSec) / totalSec) * traceW;
         ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.25)`;
         ctx.setLineDash([2, 4]);
         ctx.beginPath();
@@ -1686,119 +1680,90 @@
       }
       ctx.restore();
 
-      // Fine continuous greyscale seismogram polyline underneath the binary digits
-      const revealSamples = Math.floor(samples.length * state.sweepProgress);
+      // Mid-weight orange-red continuous waveform trace
+      const n = samples.length;
+      const revealSamples = Math.max(0, Math.min(n, Math.floor(n * state.sweepProgress)));
       if (revealSamples > 1) {
         ctx.save();
-        ctx.strokeStyle = pal.traceLine;
-        ctx.lineWidth = 1.05;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        const denom = Math.max(1, n - 1);
+        let tipX = xLeft;
+        let tipY = cy;
+
         ctx.beginPath();
-        const stride = Math.max(1, Math.floor(samples.length / (traceW * 2.5)));
-        for (let i = 0; i < revealSamples; i += stride) {
-          const x = xLeft + (i / (samples.length - 1)) * (cols * charW);
-          const y = cy - samples[i] * maxAmpPx;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      // Binary 0 / 1 waveform field (homage to build_portrait.py)
-      const baseSeed = hashSeed(seedStr);
-      const onsetThresh = Math.max(0.08, Math.min(0.20, noiseRatio * 2.8));
-
-      ctx.save();
-      ctx.font = `${fontSize.toFixed(1)}px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-
-      for (let c = 0; c < visibleCols; c++) {
-        const rng = mulberry32(baseSeed ^ Math.imul(c + 1, 2654435761));
-        const s0 = Math.floor((c / cols) * samples.length);
-        const s1 = Math.max(s0 + 1, Math.floor(((c + 1) / cols) * samples.length));
-        let vMin = Infinity, vMax = -Infinity, peakAbs = 0;
-        for (let s = s0; s < s1 && s < samples.length; s++) {
-          const v = samples[s];
-          if (v < vMin) vMin = v;
-          if (v > vMax) vMax = v;
-          const av = Math.abs(v);
-          if (av > peakAbs) peakAbs = av;
-        }
-        if (!Number.isFinite(vMin)) continue;
-
-        // Screen row indices relative to cy (upward sample > 0 -> negative row index)
-        const rTop = Math.round((-vMax * maxAmpPx) / lineH);
-        const rBot = Math.round((-vMin * maxAmpPx) / lineH);
-        const envTop = Math.min(rTop, 0);
-        const envBot = Math.max(rBot, 0);
-        const maxExcur = Math.max(1, Math.abs(rTop), Math.abs(rBot));
-        const haloPad = peakAbs > onsetThresh ? 2 : (peakAbs > 0.03 ? 1 : 0);
-
-        const cx = xLeft + (c + 0.5) * charW;
-
-        for (let r = envTop - haloPad; r <= envBot + haloPad; r++) {
-          if (r < -maxRowsHalf - 2 || r > maxRowsHalf + 2) continue;
-
-          const onRidge = r >= rTop && r <= rBot;
-          const atCrest = Math.abs(r - rTop) <= 1 || Math.abs(r - rBot) <= 1;
-          const insideLobe = r >= envTop && r <= envBot;
-          let ch = '0';
-          let alpha = 0;
-
-          if (onRidge) {
-            if (peakAbs > onsetThresh) {
-              const relRow = Math.abs(r) / maxExcur;
-              ch = atCrest || relRow > 0.45 ? '1' : (rng() < 0.7 ? '1' : '0');
-              alpha = atCrest
-                ? Math.min(0.98, 0.62 + Math.pow(peakAbs, 0.85) * 0.38)
-                : Math.min(0.82, 0.38 + relRow * 0.42);
-            } else {
-              // Quiet pre-arrival [-10s .. 0s] noise floor reads as crisp faint 0s
-              ch = '0';
-              alpha = 0.42;
+        if (n <= traceW * 1.8) {
+          for (let i = 0; i < revealSamples; i++) {
+            const x = xLeft + (i / denom) * traceW;
+            const y = cy - samples[i] * maxAmpPx;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            tipX = x;
+            tipY = y;
+          }
+        } else {
+          // Peak-preserving min/max decimation for high sample-rate channels (100+ Hz)
+          const totalBins = Math.round(traceW * 1.5);
+          const visBins = Math.max(1, Math.ceil(totalBins * state.sweepProgress));
+          let started = false;
+          for (let b = 0; b < visBins; b++) {
+            const s0 = Math.floor((b / totalBins) * n);
+            const s1 = Math.min(revealSamples, Math.max(s0 + 1, Math.floor(((b + 1) / totalBins) * n)));
+            if (s0 >= revealSamples) break;
+            let iMin = s0, iMax = s0;
+            let vMin = samples[s0], vMax = samples[s0];
+            for (let s = s0 + 1; s < s1; s++) {
+              const v = samples[s];
+              if (v < vMin) { vMin = v; iMin = s; }
+              if (v > vMax) { vMax = v; iMax = s; }
             }
-          } else if (insideLobe) {
-            const lobeSpan = Math.max(1, r < 0 ? -rTop : rBot);
-            const rel = Math.abs(r) / lobeSpan;
-            const strength = peakAbs * (0.30 + 0.70 * rel);
-            ch = strength > 0.36 && rng() < 0.55 ? '1' : '0';
-            alpha = Math.max(0.14, Math.min(0.66, Math.pow(strength, 1.08) * 0.70));
-          } else {
-            // Exponential edge bleed like build_portrait.py
-            const dist = r < envTop ? envTop - r : r - envBot;
-            const bleed = peakAbs * Math.exp(-dist / 1.15) * (0.35 + 0.65 * rng());
-            if (bleed < 0.10) continue;
-            ch = bleed > 0.28 ? '1' : '0';
-            alpha = Math.min(0.36, bleed * 0.65);
+            const firstIdx = iMin <= iMax ? iMin : iMax;
+            const secondIdx = iMin <= iMax ? iMax : iMin;
+            const x1 = xLeft + (firstIdx / denom) * traceW;
+            const y1 = cy - samples[firstIdx] * maxAmpPx;
+            if (!started) { ctx.moveTo(x1, y1); started = true; }
+            else ctx.lineTo(x1, y1);
+            tipX = x1; tipY = y1;
+            if (secondIdx !== firstIdx) {
+              const x2 = xLeft + (secondIdx / denom) * traceW;
+              const y2 = cy - samples[secondIdx] * maxAmpPx;
+              ctx.lineTo(x2, y2);
+              tipX = x2; tipY = y2;
+            }
           }
-
-          const ry = cy + r * lineH;
-          if (alpha > 0.22) {
-            ctx.fillStyle = `rgba(${pal.bgRgb}, ${(alpha * 0.58).toFixed(2)})`;
-            ctx.fillRect(cx - charW * 0.48, ry - lineH * 0.46, charW * 0.96, lineH * 0.92);
-          }
-          ctx.fillStyle = `rgba(${pal.inkRgb}, ${alpha.toFixed(2)})`;
-          ctx.fillText(ch, cx, ry);
         }
-      }
 
-      // Leading sweep cursor bar while drawing
-      if (state.sweepProgress < 1) {
-        const curX = xLeft + visibleCols * charW;
-        ctx.fillStyle = pal.ink;
-        ctx.fillRect(curX, cy - 11, charW * 0.85, 22);
+        // Subtle background halo so the orange-red trace stays crisp across dark coastlines
+        ctx.strokeStyle = pal.traceBacking;
+        ctx.lineWidth = 3.8;
+        ctx.stroke();
+
+        // Mid-weight orange-red trace stroke
+        ctx.strokeStyle = pal.trace;
+        ctx.lineWidth = 1.85;
+        ctx.stroke();
+
+        // Leading pen dot while sweeping in
+        if (state.sweepProgress < 1) {
+          ctx.beginPath();
+          ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
+          ctx.fillStyle = pal.trace;
+          ctx.fill();
+        }
+        ctx.restore();
       }
 
       // Time scale ticks along bottom of waveform band
       const tickStep = totalSec <= 65 ? 10 : 20;
       const tickY = cy + maxAmpPx + 22;
+      ctx.save();
       ctx.font = `11px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace`;
       ctx.fillStyle = pal.muted;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       for (let t = -preSec; t <= postSec; t += tickStep) {
-        const tx = xLeft + ((t + preSec) / totalSec) * (cols * charW);
+        const tx = xLeft + ((t + preSec) / totalSec) * traceW;
         ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.22)`;
         ctx.beginPath();
         ctx.moveTo(tx, tickY - 6);
