@@ -248,7 +248,9 @@ def build_readme(p, links):
     if links:
         lines += ["", "<p>"]
         pct = 100 / max(len(links), 4) - 1          # each button's share of the row
-        lines += [f'  <a href="{a(url)}">' + picture(name.rsplit("-light.svg", 1)[0], a(label), f'width="{pct:.0f}%"') + "</a>"
+        lines += [f'  <a href="{a(url)}"'
+                  + (' target="_blank" rel="noopener noreferrer">' if url.startswith("http") else ">")
+                  + picture(name.rsplit("-light.svg", 1)[0], a(label), f'width="{pct:.0f}%"') + "</a>"
                   for name, url, label in links]
         lines += ["</p>"]
     open(README_FILE, "w").write("\n".join(lines) + "\n")
