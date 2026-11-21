@@ -1110,7 +1110,7 @@
       <div class="chapter-body">
         <div class="prose">
           <p>
-            Before a trajectory across code, notes, and web pages can mean anything geometrically, heterogeneous channels have to share an honest distance metric. Background watchers index edits in <code>~/PROJECTS</code>, Markdown notes in Obsidian, and visited pages in Chrome's SQLite history into partitioned LanceDB tables. Multi-chunk files are collapsed via zero-copy PyArrow scans to one event per source—<code>timestamp = max(modified_at)</code>, <code>vector = mean(chunk_vectors)</code>—so saving a long Python file does not masquerade as two hundred consecutive steps.
+            Before a trajectory across code, notes, and web pages can mean anything geometrically, heterogeneous channels have to share an honest distance metric. Background watchers index edits in a local file store, Markdown notes in Obsidian, and visited pages in Chrome's SQLite history into partitioned LanceDB tables. Multi-chunk files are collapsed via zero-copy PyArrow scans to one event per source—<code>timestamp = max(modified_at)</code>, <code>vector = mean(chunk_vectors)</code>—so saving a long Python file does not masquerade as two hundred consecutive steps.
           </p>
           <p>
             Early clustering exposed a structural bias in off-the-shelf text encoders: raw embeddings organize mixed corpora by syntax and medium rather than subject. Measuring Adjusted Rand Index (ARI) against topic groupings showed raw file vectors clustering overwhelmingly by programming language (<code>ARI ≈ 0.74</code>)—two unrelated Python scripts sit at <code>0.83</code> cosine similarity simply because both contain <code>def</code> and <code>import</code>.
