@@ -19,22 +19,26 @@
       --font: ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace;
       --bg: #ffffff;
       --ink: #1f2328;
+      --accent: #1a7f37;
       --muted: #57606a;
       --faint: #8c959f;
       --hairline: rgba(31, 35, 40, 0.16);
-      --panel-bg: rgba(255, 255, 255, 0.78);
+      --panel-bg: rgba(255, 255, 255, 0.82);
       --pill-hover: rgba(31, 35, 40, 0.07);
+      --text-halo: 0 0 10px #ffffff, 0 0 4px #ffffff, 0 0 2px #ffffff;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0d1117;
         --ink: #e6edf3;
+        --accent: #3fb950;
         --muted: #8b949e;
         --faint: #6e7681;
         --hairline: rgba(230, 237, 243, 0.16);
-        --panel-bg: rgba(13, 17, 23, 0.76);
+        --panel-bg: rgba(13, 17, 23, 0.82);
         --pill-hover: rgba(230, 237, 243, 0.09);
+        --text-halo: 0 0 10px #0d1117, 0 0 4px #0d1117, 0 0 2px #0d1117;
       }
     }
 
@@ -68,15 +72,12 @@
       position: fixed;
       top: 22px;
       left: 26px;
-      right: 26px;
-      max-width: 680px;
+      max-width: min(680px, calc(100vw - 52px));
       pointer-events: none;
       z-index: 2;
-      padding: 10px 14px;
-      border-radius: 6px;
-      background: var(--panel-bg);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
+      padding: 0;
+      background: transparent;
+      text-shadow: var(--text-halo);
     }
 
     .kicker {
@@ -84,7 +85,7 @@
       font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--accent);
       margin-bottom: 5px;
     }
 
@@ -120,7 +121,7 @@
       display: inline-block;
       width: 7px;
       height: 12px;
-      background: var(--ink);
+      background: var(--accent);
       vertical-align: -1px;
       margin-left: 4px;
       animation: blink 1.06s steps(1) infinite;
@@ -188,11 +189,8 @@
       font-size: 12px;
       color: var(--muted);
       text-decoration: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background: var(--panel-bg);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      padding: 4px 6px;
+      text-shadow: var(--text-halo);
     }
 
     a.subtle-link:hover {
@@ -203,17 +201,15 @@
     .whisper {
       font-size: 11.5px;
       color: var(--faint);
-      padding: 2px 6px;
-      background: var(--panel-bg);
-      border-radius: 4px;
+      padding: 2px 4px;
+      text-shadow: var(--text-halo);
     }
 
     @media (max-width: 640px) {
       header.hud {
         top: 12px;
         left: 12px;
-        right: 12px;
-        padding: 8px 10px;
+        max-width: calc(100vw - 24px);
       }
       h1.title { font-size: 15px; }
       .meta { font-size: 11.5px; }
@@ -256,7 +252,7 @@
   (() => {
     'use strict';
 
-    // ---- Palette (greyscale map + orange-red waveform, synced with OS theme) --------
+    // ---- Palette (greyscale map + accent-green waveform, synced with OS theme) ------
     const PALETTES = {
       light: {
         bg: '#ffffff',
@@ -272,8 +268,8 @@
         ink: '#1f2328',
         inkRgb: '31, 35, 40',
         muted: '#57606a',
-        trace: '#e04622',
-        traceBacking: 'rgba(255, 255, 255, 0.62)',
+        trace: '#1a7f37',
+        traceBacking: 'rgba(255, 255, 255, 0.68)',
         baseline: 'rgba(31, 35, 40, 0.16)',
         markerFill: '#ffffff',
       },
@@ -291,8 +287,8 @@
         ink: '#e6edf3',
         inkRgb: '230, 237, 243',
         muted: '#8b949e',
-        trace: '#ff5733',
-        traceBacking: 'rgba(13, 17, 23, 0.62)',
+        trace: '#3fb950',
+        traceBacking: 'rgba(13, 17, 23, 0.68)',
         baseline: 'rgba(230, 237, 243, 0.15)',
         markerFill: '#0d1117',
       },
@@ -329,6 +325,7 @@
     // ---- DOM ------------------------------------------------------------------------
     const canvas = document.getElementById('stage');
     const ctx = canvas.getContext('2d');
+    const elHud = document.getElementById('hud');
     const elTitle = document.getElementById('eventTitle');
     const elMeta = document.getElementById('eventMeta');
     const elStatus = document.getElementById('statusLine');
@@ -480,6 +477,7 @@
           const topo = await fetchWithTimeout(u, 6500, 'json');
           if (topo && topo.arcs) {
             state.world = decodeTopoJson(topo);
+            if (!state.current) renderScene();
             return state.world;
           }
         } catch (_) {
@@ -1377,60 +1375,18 @@
       }[c]));
     }
 
-    // ---- Canvas Rendering: Greyscale Map + Binary Waveform Superposition ------------
-    function renderScene() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-      const W = window.innerWidth;
-      const H = window.innerHeight;
-      if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) {
-        canvas.width = Math.round(W * dpr);
-        canvas.height = Math.round(H * dpr);
-      }
+    // ---- Stage Layout & Canvas Rendering --------------------------------------------
+    function getStageMetrics(W, H) {
+      const hudBottom = elHud ? elHud.getBoundingClientRect().bottom : 108;
+      const topSafe = Math.min(H * 0.34, Math.max(82, hudBottom + 14));
+      const botSafe = W < 640 ? 56 : 66;
+      const availH = Math.max(180, H - topSafe - botSafe);
+      const stageCy = topSafe + availH * 0.5;
+      const minR = Math.max(76, Math.min(W * 0.44, availH * 0.465));
+      return { topSafe, botSafe, availH, stageCy, minR };
+    }
 
-      ctx.save();
-      ctx.scale(dpr, dpr);
-      const pal = getPalette();
-
-      // Clear background
-      ctx.fillStyle = pal.bg;
-      ctx.fillRect(0, 0, W, H);
-
-      if (!state.current) {
-        drawIdleBackdrop(W, H, pal);
-        ctx.restore();
-        return;
-      }
-
-      const { event: ev, station: st, pick, conditioned, preSec, postSec } = state.current;
-      const minDim = Math.min(W, H);
-
-      // Center projection on midpoint of Event <-> Station great-circle arc
-      const arcVecs = slerpGreatCircle(ev.lat, ev.lon, st.lat, st.lon, 101);
-      const midVec = arcVecs[50];
-      const [midLat, midLon] = vecToLatLon(midVec);
-
-      // Dynamic zoom: full hemisphere for teleseismic, smooth zoom for regional
-      const halfSpanRad = Math.max(2.0, pick.distDeg * 0.5) * DEG;
-      const halfChord = Math.sin(halfSpanRad * 0.5) * Math.SQRT2;
-      const desiredScreenHalf = minDim * 0.24;
-      const R = Math.max(minDim * 0.43, Math.min(minDim * 4.2, desiredScreenHalf / Math.max(0.025, halfChord)));
-
-      const mapCx = W * 0.5;
-      const mapCy = H * 0.5;
-      const proj = makeProjector(midLat, midLon, mapCx, mapCy, R);
-
-      // 1. Greyscale Globe / Map Layer
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(mapCx, mapCy, R, 0, Math.PI * 2);
-      ctx.fillStyle = pal.sphereFill;
-      ctx.fill();
-      ctx.clip();
-
-      // Graticule (adaptive 5, 10, or 15 deg)
-      const gratStep = R > minDim * 1.6 ? 5 : R > minDim * 0.9 ? 10 : 15;
-      drawGraticule(proj, gratStep, pal);
-
+    function drawWorldPolygons(proj, pal) {
       // Filled countries (guaranteed <90deg span each -> artifact-free back-hemisphere culling)
       if (state.world && state.world.countries.length) {
         ctx.fillStyle = pal.landFill;
@@ -1475,6 +1431,62 @@
         }
         ctx.stroke();
       }
+    }
+
+    function renderScene() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) {
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+      }
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      const pal = getPalette();
+      const layout = getStageMetrics(W, H);
+
+      // Clear background
+      ctx.fillStyle = pal.bg;
+      ctx.fillRect(0, 0, W, H);
+
+      if (!state.current) {
+        drawIdleBackdrop(W, H, layout, pal);
+        ctx.restore();
+        return;
+      }
+
+      const { event: ev, station: st, pick, conditioned, preSec, postSec } = state.current;
+      const minDim = Math.min(W, layout.availH);
+
+      // Center projection on midpoint of Event <-> Station great-circle arc
+      const arcVecs = slerpGreatCircle(ev.lat, ev.lon, st.lat, st.lon, 101);
+      const midVec = arcVecs[50];
+      const [midLat, midLon] = vecToLatLon(midVec);
+
+      // Dynamic zoom: unobstructed full hemisphere below HUD for teleseismic, smooth zoom for regional
+      const halfSpanRad = Math.max(2.0, pick.distDeg * 0.5) * DEG;
+      const halfChord = Math.sin(halfSpanRad * 0.5) * Math.SQRT2;
+      const desiredScreenHalf = minDim * 0.25;
+      const R = Math.max(layout.minR, Math.min(minDim * 4.2, desiredScreenHalf / Math.max(0.025, halfChord)));
+
+      const mapCx = W * 0.5;
+      const mapCy = layout.stageCy;
+      const proj = makeProjector(midLat, midLon, mapCx, mapCy, R);
+
+      // 1. Greyscale Globe / Map Layer
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(mapCx, mapCy, R, 0, Math.PI * 2);
+      ctx.fillStyle = pal.sphereFill;
+      ctx.fill();
+      ctx.clip();
+
+      // Graticule (adaptive 5, 10, or 15 deg)
+      const gratStep = R > minDim * 1.6 ? 5 : R > minDim * 0.9 ? 10 : 15;
+      drawGraticule(proj, gratStep, pal);
+      drawWorldPolygons(proj, pal);
 
       // Concentric epicentral wavefront rings
       const ringStep = pick.distDeg < 10 ? 2 : pick.distDeg < 30 ? 5 : 15;
@@ -1502,33 +1514,35 @@
       ctx.lineWidth = 1.1;
       ctx.stroke();
 
-      // 2. Waveform Superposition Layer (mid-weight orange-red trace)
-      const traceCy = H * 0.53;
-      drawWaveform(W, H, traceCy, conditioned, pick, preSec, postSec, pal);
+      // 2. Waveform Superposition Layer (mid-weight accent-green trace)
+      const traceCy = layout.stageCy;
+      drawWaveform(W, H, traceCy, layout, conditioned, pick, preSec, postSec, pal);
 
       // 3. Epicenter & Station Map Markers + Crisp Monospace Callouts (drawn clearly above map)
       const [ex, ey] = proj(latLonToVec(ev.lat, ev.lon));
       const [sx, sy] = proj(latLonToVec(st.lat, st.lon));
-      drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, pal);
+      drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, layout, pal);
 
       ctx.restore();
     }
 
-    function drawIdleBackdrop(W, H, pal) {
-      const minDim = Math.min(W, H);
-      const R = minDim * 0.41;
-      const proj = makeProjector(20, 0, W * 0.5, H * 0.5, R);
+    function drawIdleBackdrop(W, H, layout, pal) {
+      const cx = W * 0.5;
+      const cy = layout.stageCy;
+      const R = layout.minR;
+      const proj = makeProjector(20, 0, cx, cy, R);
       ctx.save();
       ctx.beginPath();
-      ctx.arc(W * 0.5, H * 0.5, R, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fillStyle = pal.sphereFill;
       ctx.fill();
       ctx.clip();
       drawGraticule(proj, 15, pal);
+      drawWorldPolygons(proj, pal);
       ctx.restore();
 
       ctx.beginPath();
-      ctx.arc(W * 0.5, H * 0.5, R, 0, Math.PI * 2);
+      ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.strokeStyle = pal.limb;
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -1574,7 +1588,7 @@
       ctx.stroke();
     }
 
-    function drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, pal) {
+    function drawMapEndpointMarkers(ex, ey, sx, sy, ev, st, pick, traceCy, layout, pal) {
       ctx.font = "bold 11.5px ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace";
       ctx.textBaseline = 'middle';
 
@@ -1592,7 +1606,7 @@
       ctx.fill();
 
       const evLabel = `◎ M${ev.mag.toFixed(1)} · ${ev.depthKm.toFixed(0)}km`;
-      drawCalloutTag(ex, ey, evLabel, ey < traceCy ? -20 : 20, pal);
+      drawCalloutTag(ex, ey, evLabel, ey < traceCy ? -20 : 20, layout, pal);
 
       // Station seismometer triangle ▲
       const tri = 6.5;
@@ -1608,15 +1622,15 @@
       ctx.stroke();
 
       const stLabel = `▲ ${st.net}.${st.sta} · Δ${pick.distDeg.toFixed(1)}°`;
-      drawCalloutTag(sx, sy, stLabel, sy < traceCy ? -20 : 20, pal);
+      drawCalloutTag(sx, sy, stLabel, sy < traceCy ? -20 : 20, layout, pal);
     }
 
-    function drawCalloutTag(x, y, text, dy, pal) {
+    function drawCalloutTag(x, y, text, dy, layout, pal) {
       const padX = 6;
       const h = 19;
       const w = ctx.measureText(text).width + padX * 2;
       const bx = Math.max(12, Math.min(window.innerWidth - w - 12, x - w * 0.5));
-      const by = y + dy - h * 0.5;
+      const by = Math.max(layout.topSafe, Math.min(window.innerHeight - layout.botSafe - h, y + dy - h * 0.5));
 
       ctx.fillStyle = `rgba(${pal.bgRgb}, 0.82)`;
       ctx.strokeStyle = `rgba(${pal.inkRgb}, 0.35)`;
@@ -1630,12 +1644,12 @@
       ctx.fillText(text, bx + padX, by + h * 0.5 + 0.5);
     }
 
-    function drawWaveform(W, H, cy, conditioned, pick, preSec, postSec, pal) {
+    function drawWaveform(W, H, cy, layout, conditioned, pick, preSec, postSec, pal) {
       const { samples } = conditioned;
       const totalSec = preSec + postSec;
       const xPad = W < 640 ? 18 : 48;
       const traceW = Math.max(120, W - xPad * 2);
-      const maxAmpPx = Math.min(H * 0.25, 195);
+      const maxAmpPx = Math.min(layout.availH * 0.32, 190);
       const xLeft = (W - traceW) * 0.5;
       const xPick = xLeft + (preSec / totalSec) * traceW;
 
@@ -1680,7 +1694,7 @@
       }
       ctx.restore();
 
-      // Mid-weight orange-red continuous waveform trace
+      // Mid-weight accent-green continuous waveform trace
       const n = samples.length;
       const revealSamples = Math.max(0, Math.min(n, Math.floor(n * state.sweepProgress)));
       if (revealSamples > 1) {
@@ -1734,12 +1748,12 @@
           }
         }
 
-        // Subtle background halo so the orange-red trace stays crisp across dark coastlines
+        // Subtle background halo so the accent-green trace stays crisp across dark coastlines
         ctx.strokeStyle = pal.traceBacking;
         ctx.lineWidth = 3.8;
         ctx.stroke();
 
-        // Mid-weight orange-red trace stroke
+        // Mid-weight accent-green trace stroke
         ctx.strokeStyle = pal.trace;
         ctx.lineWidth = 1.85;
         ctx.stroke();
