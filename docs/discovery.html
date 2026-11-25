@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Daily Digest · 2026-11-25</title>
+  
+<script>
+(function() {
+  try {
+    var t = localStorage.getItem('dd-theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+
+  <style>
+@font-face {
+  src: local('Consolas'), local('Consolas Bold');
+  font-family: 'ConsolasFallback';
+  font-display: swap;
+  -webkit-size-adjust: 109%;
+  size-adjust: 109%;
+}
+
+:root {
+  color-scheme: light dark;
+  --font: ConsolasFallback, Consolas, Menlo, 'DejaVu Sans Mono', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  --bg: #ffffff;
+  --bg-subtle: #f6f8fa;
+  --bg-card: #ffffff;
+  --ink: #1f2328;
+  --muted: #57606a;
+  --faint: #8c959f;
+  --accent: #1a7f37;
+  --accent-soft: rgba(26, 127, 55, 0.10);
+  --accent-border: rgba(26, 127, 55, 0.34);
+  --blue: #2563eb;
+  --blue-soft: rgba(37, 99, 235, 0.10);
+  --blue-border: rgba(37, 99, 235, 0.32);
+  --amber: #c2410c;
+  --amber-soft: rgba(234, 88, 12, 0.09);
+  --amber-border: rgba(234, 88, 12, 0.32);
+  --ink-soft: rgba(31, 35, 40, 0.07);
+  --ink-border: rgba(31, 35, 40, 0.24);
+  --mark-bg: rgba(234, 179, 8, 0.32);
+  --hairline: rgba(31, 35, 40, 0.13);
+  --hairline-strong: rgba(31, 35, 40, 0.24);
+  --pill-hover: rgba(31, 35, 40, 0.06);
+  --shadow: 0 10px 28px rgba(31, 35, 40, 0.08), 0 2px 6px rgba(31, 35, 40, 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --bg-subtle: #131922;
+    --bg-card: #161d27;
+    --ink: #e6edf3;
+    --muted: #8b949e;
+    --faint: #6e7681;
+    --accent: #3fb950;
+    --accent-soft: rgba(63, 185, 80, 0.13);
+    --accent-border: rgba(63, 185, 80, 0.36);
+    --blue: #6e8efb;
+    --blue-soft: rgba(110, 142, 251, 0.14);
+    --blue-border: rgba(110, 142, 251, 0.36);
+    --amber: #fb923c;
+    --amber-soft: rgba(251, 146, 60, 0.12);
+    --amber-border: rgba(251, 146, 60, 0.36);
+    --ink-soft: rgba(230, 237, 243, 0.09);
+    --ink-border: rgba(230, 237, 243, 0.24);
+    --mark-bg: rgba(250, 204, 21, 0.26);
+    --hairline: rgba(230, 237, 243, 0.12);
+    --hairline-strong: rgba(230, 237, 243, 0.24);
+    --pill-hover: rgba(230, 237, 243, 0.08);
+    --shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+  }
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-subtle: #f6f8fa;
+  --bg-card: #ffffff;
+  --ink: #1f2328;
+  --muted: #57606a;
+  --faint: #8c959f;
+  --accent: #1a7f37;
+  --accent-soft: rgba(26, 127, 55, 0.10);
+  --accent-border: rgba(26, 127, 55, 0.34);
+  --blue: #2563eb;
+  --blue-soft: rgba(37, 99, 235, 0.10);
+  --blue-border: rgba(37, 99, 235, 0.32);
+  --amber: #c2410c;
+  --amber-soft: rgba(234, 88, 12, 0.09);
+  --amber-border: rgba(234, 88, 12, 0.32);
+  --ink-soft: rgba(31, 35, 40, 0.07);
+  --ink-border: rgba(31, 35, 40, 0.24);
+  --mark-bg: rgba(234, 179, 8, 0.32);
+  --hairline: rgba(31, 35, 40, 0.13);
+  --hairline-strong: rgba(31, 35, 40, 0.24);
+  --pill-hover: rgba(31, 35, 40, 0.06);
+  --shadow: 0 10px 28px rgba(31, 35, 40, 0.08), 0 2px 6px rgba(31, 35, 40, 0.04);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --bg-subtle: #131922;
+  --bg-card: #161d27;
+  --ink: #e6edf3;
+  --muted: #8b949e;
+  --faint: #6e7681;
+  --accent: #3fb950;
+  --accent-soft: rgba(63, 185, 80, 0.13);
+  --accent-border: rgba(63, 185, 80, 0.36);
+  --blue: #6e8efb;
+  --blue-soft: rgba(110, 142, 251, 0.14);
+  --blue-border: rgba(110, 142, 251, 0.36);
+  --amber: #fb923c;
+  --amber-soft: rgba(251, 146, 60, 0.12);
+  --amber-border: rgba(251, 146, 60, 0.36);
+  --ink-soft: rgba(230, 237, 243, 0.09);
+  --ink-border: rgba(230, 237, 243, 0.24);
+  --mark-bg: rgba(250, 204, 21, 0.26);
+  --hairline: rgba(230, 237, 243, 0.12);
+  --hairline-strong: rgba(230, 237, 243, 0.24);
+  --pill-hover: rgba(230, 237, 243, 0.08);
+  --shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding: 0 20px 80px;
+}
+
+.wrap { max-width: 985px; margin: 0 auto; transition: max-width 0.18s ease; }
+body.sidebar-open .wrap.digest-wrap { max-width: 1280px; }
+
+/* ── Top Navigation Bar ── */
+nav.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 18px 0 15px;
+  border-bottom: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.nav-links, .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+a.pill, button.pill {
+  appearance: none;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  height: 30px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+}
+a.pill:hover, button.pill:hover { background: var(--pill-hover); }
+a.pill.active { background: var(--ink); color: var(--bg); }
+
+a.pill:focus-visible, button.pill:focus-visible, button.chip-btn:focus-visible,
+button.guest-chip:focus-visible, button.edge-toggle:focus-visible, input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+a.jump-link {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 4px 7px;
+  border-radius: 4px;
+}
+a.jump-link:hover { color: var(--ink); background: var(--pill-hover); }
+.date-nav-sep { color: var(--faint); font-size: 12px; }
+
+/* ── Masthead ── */
+header.masthead { padding: 20px 0 14px; }
+.accent-rule { width: 56px; height: 3px; background: var(--accent); margin-bottom: 10px; }
+.kicker {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+h1.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+.masthead-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  align-items: center;
+}
+.masthead-sub strong { color: var(--ink); }
+
+/* ── Unboxed Editorial Executive Brief ── */
+section.exec-brief {
+  padding: 6px 0 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+.eb-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.eb-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.eb-baseline { font-size: 11px; color: var(--faint); }
+.eb-headline {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 12px;
+  max-width: 78ch;
+}
+.eb-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.eb-block {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 8px 16px;
+  align-items: baseline;
+}
+@media (max-width: 700px) {
+  .eb-block { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+.eb-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.eb-col-title.eb-title-new { color: var(--accent); }
+.eb-col-title.eb-title-tech { color: var(--blue); }
+.eb-col-title.eb-title-radar { color: var(--amber); }
+
+ul.eb-list { list-style: none; }
+ul.eb-list li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+ul.eb-list li:last-child { margin-bottom: 0; }
+ul.eb-list li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+ul.eb-list.eb-list-radar li::before { color: var(--amber); }
+ul.eb-list.eb-list-tech li::before { color: var(--blue); }
+
+.eb-item-lead { font-weight: 700; color: var(--ink); }
+.eb-item-lead a { color: var(--ink); text-decoration: none; }
+.eb-item-lead a:hover { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
+.eb-item-desc { color: var(--muted); }
+.eb-refs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 5px;
+  vertical-align: baseline;
+}
+a.eb-ref-chip {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  padding: 0 5px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.eb-ref-chip:hover { text-decoration: underline; }
+.radar-metric {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--amber);
+  background: var(--amber-soft);
+  border: 1px solid var(--amber-border);
+  border-radius: 4px;
+  padding: 0.5px 6px;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+.radar-cat {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.5px 5px;
+  margin-right: 4px;
+}
+
+/* ── Minimal Keyword Momentum Line Plot (Cold-Left -> Warm-Right) ── */
+section.trend-strip {
+  padding: 14px 0 12px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 4px;
+}
+.trend-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 14px;
+  margin-bottom: 6px;
+}
+.trend-kicker {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.trend-readout {
+  font-size: 11px;
+  color: var(--faint);
+  min-height: 1.4em;
+}
+.trend-readout strong { color: var(--ink); }
+.trend-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+.trend-axis { stroke: var(--hairline-strong); stroke-width: 1; }
+.trend-grid { stroke: var(--hairline); stroke-width: 1; stroke-dasharray: 2 3; }
+.trend-tick-label {
+  fill: var(--faint);
+  font-family: var(--font);
+  font-size: 10px;
+}
+.trend-bin-label {
+  fill: var(--muted);
+  font-family: var(--font);
+  font-size: 9.5px;
+}
+.trend-end-label {
+  font-family: var(--font);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.trend-hover-line {
+  stroke: var(--hairline-strong);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  opacity: 0;
+  pointer-events: none;
+}
+.trend-hover-zone { fill: transparent; cursor: crosshair; }
+
+/* ── Filter & Stream Search Toolbar ── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 10px;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 4px;
+}
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+.filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+button.chip-btn {
+  appearance: none;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 3.5px 10px;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+button.chip-btn:hover { color: var(--ink); border-color: var(--hairline-strong); }
+button.chip-btn.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+button.chip-btn.novel-chip.active {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.chip-count { opacity: 0.72; font-weight: 400; margin-left: 3px; }
+
+.stream-search {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 4px 11px;
+  width: 210px;
+}
+.stream-search::placeholder { color: var(--faint); }
+
+/* ── Two-Column Digest Layout + Collapsible Side-Toggled Guest Sidebar ── */
+.digest-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+  position: relative;
+}
+body.sidebar-open .digest-layout {
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 26px;
+}
+
+/* ── Flat Scan Stream (Compact Click-to-Expand Rows) ── */
+main.stream { min-width: 0; }
+
+article.ep-row {
+  padding: 13px 0 12px;
+  border-bottom: 1px solid var(--hairline);
+  transition: background-color 0.25s ease;
+}
+article.ep-row.hidden { display: none; }
+article.ep-row.flash {
+  background: var(--accent-soft);
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-radius: 6px;
+}
+
+.ep-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 7px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.lane-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.lane-accent { color: var(--accent); background: var(--accent-soft); border-color: var(--accent-border); }
+.lane-blue { color: var(--blue); background: var(--blue-soft); border-color: var(--blue-border); }
+.lane-amber { color: var(--amber); background: var(--amber-soft); border-color: var(--amber-border); }
+.lane-ink { color: var(--ink); background: var(--ink-soft); border-color: var(--ink-border); }
+
+.nov-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 4px;
+  cursor: help;
+}
+.nov-new { color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-border); }
+.nov-cont { color: var(--blue); background: var(--blue-soft); border: 1px solid var(--blue-border); }
+.nov-ever { color: var(--faint); background: var(--bg-subtle); border: 1px solid var(--hairline); }
+
+.ep-channel { font-weight: 700; color: var(--ink); }
+.ep-dot { color: var(--faint); }
+.tier-chip {
+  font-size: 10px;
+  color: var(--faint);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.5px 5px;
+}
+
+h2.ep-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.32;
+  margin-bottom: 5px;
+}
+h2.ep-title a { color: var(--ink); text-decoration: none; }
+h2.ep-title a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.ext-arrow { color: var(--faint); font-size: 0.85em; margin-left: 3px; }
+
+.ep-oneliner {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 7px;
+}
+
+.guest-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+.guest-chip-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--faint);
+  font-weight: 700;
+}
+button.guest-chip {
+  appearance: none;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 1.5px 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 0.14s ease, background-color 0.14s ease, color 0.14s ease;
+}
+button.guest-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+button.guest-chip .g-aff { color: var(--muted); font-size: 10.5px; }
+button.guest-chip:hover .g-aff { color: var(--accent); }
+
+/* ── Click-to-Expand Details + In-Episode Search ── */
+details.ep-details { margin-top: 2px; }
+details.ep-details > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 2px 6px 2px 0;
+  border-radius: 4px;
+}
+details.ep-details > summary::-webkit-details-marker { display: none; }
+details.ep-details > summary:hover { text-decoration: underline; text-underline-offset: 2px; }
+.ep-caret {
+  display: inline-block;
+  font-size: 11px;
+  transition: transform 0.14s ease;
+}
+details.ep-details[open] .ep-caret { transform: rotate(90deg); }
+.ep-summary-meta { font-weight: 400; color: var(--faint); }
+
+.ep-expanded-body {
+  margin-top: 9px;
+  padding-left: 10px;
+  border-left: 2px solid var(--hairline);
+}
+.ep-novelty-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+ul.chevron-list { list-style: none; margin: 2px 0 9px; }
+ul.chevron-list li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 5px;
+  color: var(--ink);
+  font-size: 13.2px;
+  line-height: 1.54;
+}
+ul.chevron-list li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ep-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.tech-tag {
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--muted);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1.5px 6px;
+  white-space: nowrap;
+}
+.tech-tag.work-tag { color: var(--faint); font-style: italic; }
+
+.in-ep-search-box {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+}
+.in-ep-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+input.ep-transcript-search {
+  flex: 1 1 200px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+input.ep-transcript-search::placeholder { color: var(--faint); }
+.ep-search-status { font-size: 11px; color: var(--faint); }
+.ep-search-hits {
+  margin-top: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ep-hit {
+  font-size: 12px;
+  line-height: 1.48;
+  color: var(--ink);
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+.ep-hit mark {
+  background: var(--mark-bg);
+  color: var(--ink);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* ── Side-Edge Toggle Button ── */
+button.edge-toggle {
+  appearance: none;
+  font-family: var(--font);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--bg-card);
+  border: 1.5px solid var(--hairline-strong);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+}
+button.edge-toggle:hover { border-color: var(--accent); color: var(--accent); }
+button.edge-toggle-collapsed {
+  position: fixed;
+  right: 0;
+  top: 132px;
+  z-index: 40;
+  border-right: none;
+  border-radius: 999px 0 0 999px;
+  padding: 9px 12px 9px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+body.sidebar-open button.edge-toggle-collapsed { display: none; }
+
+/* ── Right Guest Intelligence Sidebar ── */
+aside.guest-sidebar {
+  display: none;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 14px 15px 18px;
+}
+body.sidebar-open aside.guest-sidebar { display: block; }
+
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 10px;
+}
+.sidebar-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+button.sidebar-close {
+  appearance: none;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 2px 9px;
+  cursor: pointer;
+}
+button.sidebar-close:hover { color: var(--ink); border-color: var(--ink); }
+
+.sidebar-search {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 5px;
+  padding: 6px 9px;
+  margin-bottom: 12px;
+}
+.sidebar-search::placeholder { color: var(--faint); }
+
+.guest-card {
+  padding: 11px 10px;
+  margin-bottom: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.guest-card.hidden { display: none; }
+.guest-card.focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.gc-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.gc-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.status-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.badge-new { color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-border); }
+.badge-seen { color: var(--blue); background: var(--blue-soft); border: 1px solid var(--blue-border); }
+
+.gc-aff { font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.gc-lens {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--bg-subtle);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-bottom: 7px;
+}
+.gc-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 6px 0 3px;
+}
+ul.gc-evidence { list-style: none; margin: 0 0 6px; }
+ul.gc-evidence li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 12px;
+  line-height: 1.48;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+ul.gc-evidence li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+a.cite-link { color: var(--blue); text-decoration: none; font-size: 11px; margin-left: 3px; }
+a.cite-link:hover { text-decoration: underline; }
+.cite-muted { color: var(--faint); font-size: 10.5px; margin-left: 3px; }
+.gc-thesis { font-size: 11.8px; color: var(--muted); line-height: 1.46; margin-bottom: 6px; }
+.gc-shows { display: flex; flex-wrap: wrap; gap: 4px; }
+a.show-jump {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+a.show-jump:hover { text-decoration: underline; }
+
+/* ── Quiet Channels & Footer ── */
+footer.page-footer {
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+.quiet-channels { margin-top: 18px; font-size: 12px; color: var(--faint); }
+
+/* ── Archive & Guest Directory ── */
+.archive-list { list-style: none; }
+.archive-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.archive-date { font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: none; }
+.archive-date:hover { color: var(--accent); text-decoration: underline; }
+.archive-meta { font-size: 12px; color: var(--muted); }
+.archive-guests { width: 100%; font-size: 12px; color: var(--faint); margin-top: 2px; }
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+/* ── Responsive Drawer on Narrow Viewports ── */
+.drawer-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.36);
+  z-index: 45;
+}
+@media (max-width: 980px) {
+  body.sidebar-open .digest-layout { grid-template-columns: minmax(0, 1fr); }
+  body.sidebar-open .drawer-backdrop { display: block; }
+  body.sidebar-open aside.guest-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(92vw, 390px);
+    max-height: 100vh;
+    z-index: 50;
+    border-radius: 0;
+    border-right: none;
+    box-shadow: var(--shadow);
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap digest-wrap">
+  
+<nav class="topbar" aria-label="Primary navigation">
+  <div class="nav-links"><a class="pill active" href="../../../index.html">Latest</a><a class="pill" href="../../../archive.html">Archive</a><a class="pill" href="../../../guests/index.html">Guests</a></div>
+  <div class="nav-actions">
+    <a class="jump-link" href="../../../digests/2026/11/2026-11-24.html">← 2026-11-24</a>
+    <button type="button" class="pill" id="theme-toggle">Dark ◐</button>
+  </div>
+</nav>
+
+
+  <header class="masthead">
+    <div class="accent-rule"></div>
+    <div class="kicker">DISCOVERY · DAILY DIGEST</div>
+    <h1 class="page-title">2026-11-25</h1>
+    <div class="masthead-sub">
+      <span><strong>1</strong> episodes</span>
+      <span>·</span>
+      <span><strong>1</strong> guests tracked</span>
+      
+      <span>·</span>
+      <span>Frontier AI, compute, policy &amp; geopolitics — distilled from transcripts with guest expertise tracking.</span>
+    </div>
+  </header>
+
+  
+<section class="exec-brief" aria-label="Executive Brief">
+  <div class="eb-top">
+    <div class="eb-kicker">Executive Brief</div>
+    <div class="eb-baseline">vs. 90 recent archive episodes</div>
+  </div>
+  <div class="eb-headline">CSIS&#x27;s weekly AI policy show pairs Ben Buchanan&#x27;s White House retrospective with news recaps of Jensen Huang&#x27;s Nvidia reinstatement and a claimed Claude-assisted Riemann Hypothesis proof, most of it an extension of threads already running.</div>
+  <div class="eb-flow"><div class="eb-block"><div class="eb-col-title eb-title-new">New Signal</div><ul class="eb-list"><li><span class="eb-item-lead">Jensen Huang reinstated as Nvidia CEO:</span> <span class="eb-item-desc">The archive covers only his resignation and the aftermath; Nvidia&#x27;s press release reversing it is a new development, and Sharp Tech&#x27;s Nov 20 episode argued he wasn&#x27;t coming back.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li><li><span class="eb-item-lead">Claimed Claude-assisted Riemann Hypothesis proof:</span> <span class="eb-item-desc">No prior archive coverage of an Anthropic mathematician&#x27;s statement claiming Claude helped prove the Riemann Hypothesis, though the claim is only relayed in a news recap here.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li></ul></div><div class="eb-block"><div class="eb-col-title">Themes</div><ul class="eb-list"><li><span class="eb-item-lead">Buchanan on US-China AI strategy:</span> <span class="eb-item-desc">Today&#x27;s episode repeats Buchanan&#x27;s earlier rounds on Biden-era export controls, compute governance and spending a US lead on safety, which also ran on The Cognitive Revolution (Nov 21) and The AI Power Podcast (Nov 10). Today&#x27;s addition is the tie-in to the BIS remote-access rule and the Trump-Xi APEC talks.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li><li><span class="eb-item-lead">Nvidia leadership and export-control fallout:</span> <span class="eb-item-desc">The Huang saga (resignation, spy affair, BIS remote-access rule) has run for roughly two weeks across many shows. Today&#x27;s recap adds his reinstatement as CEO and board director.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li></ul></div><div class="eb-block"><div class="eb-col-title eb-title-radar">Discovery</div><ul class="eb-list eb-list-radar"><li><span class="radar-cat">Mathematics</span><span class="eb-item-lead"><a href="https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf" target="_blank" rel="noopener noreferrer">Matrix Multiplication is Θ(n^2.25) [pdf]<span class="ext-arrow">↗</span></a></span><span class="radar-metric">HN 834 pts · 458 comments</span> <span class="eb-item-desc">— A claimed tight bound for matrix multiplication near n^2.25 would be a major step in theoretical computer science and mathematics, and it is dominating technical discourse.</span></li><li><span class="radar-cat">Space</span><span class="eb-item-lead"><a href="https://www.space.com/space-exploration/human-spaceflight/china-shenzhou-24-first-international-astronaut-launch-tiangong-space-station" target="_blank" rel="noopener noreferrer">China&#x27;s Shenzhou-24 mission launches 1st international astronaut to Tiangong space station<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Science News · space.com</span> <span class="eb-item-desc">— The first international astronaut flying to China&#x27;s Tiangong station is a milestone for crewed spaceflight and space geopolitics.</span></li></ul></div></div>
+</section>
+
+  
+<section class="trend-strip" aria-label="Keyword Momentum">
+  <div class="trend-head">
+    <div class="trend-kicker">Keyword Momentum · 28d</div>
+    <div class="trend-readout" id="trend-readout">running hits (10-29 → 11-25) · hover axis for daily breakdown</div>
+  </div>
+  <svg class="trend-svg" viewBox="0 0 920 178" role="img" aria-label="Top keyword running count trends over the last 28 days">
+    <defs><linearGradient id="dd-grad-0" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.14"/><stop offset="55%" stop-color="var(--accent)" stop-opacity="0.48"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="1.0"/></linearGradient><linearGradient id="dd-grad-1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--blue)" stop-opacity="0.14"/><stop offset="55%" stop-color="var(--blue)" stop-opacity="0.48"/><stop offset="100%" stop-color="var(--blue)" stop-opacity="1.0"/></linearGradient><linearGradient id="dd-grad-2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--amber)" stop-opacity="0.14"/><stop offset="55%" stop-color="var(--amber)" stop-opacity="0.48"/><stop offset="100%" stop-color="var(--amber)" stop-opacity="1.0"/></linearGradient><linearGradient id="dd-grad-3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="var(--ink)" stop-opacity="0.14"/><stop offset="55%" stop-color="var(--ink)" stop-opacity="0.48"/><stop offset="100%" stop-color="var(--ink)" stop-opacity="1.0"/></linearGradient><linearGradient id="dd-grad-4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.14"/><stop offset="55%" stop-color="#8b5cf6" stop-opacity="0.48"/><stop offset="100%" stop-color="#8b5cf6" stop-opacity="1.0"/></linearGradient></defs>
+    <line class="trend-axis" x1="34" y1="16" x2="34" y2="136"/><line class="trend-axis" x1="34" y1="136" x2="768" y2="136"/><text class="trend-tick-label" x="27" y="139.5" text-anchor="end">0</text><line class="trend-grid" x1="34" y1="76.0" x2="768" y2="76.0"/><text class="trend-tick-label" x="27" y="79.5" text-anchor="end">11</text><line class="trend-grid" x1="34" y1="16.0" x2="768" y2="16.0"/><text class="trend-tick-label" x="27" y="19.5" text-anchor="end">22</text><line class="trend-axis" x1="34.0" y1="136" x2="34.0" y2="140"/><text class="trend-tick-label" x="34.0" y="151" text-anchor="middle">10-29</text><line class="trend-axis" x1="197.1" y1="136" x2="197.1" y2="140"/><text class="trend-tick-label" x="197.1" y="151" text-anchor="middle">11-04</text><line class="trend-axis" x1="360.2" y1="136" x2="360.2" y2="140"/><text class="trend-tick-label" x="360.2" y="151" text-anchor="middle">11-10</text><line class="trend-axis" x1="523.3" y1="136" x2="523.3" y2="140"/><text class="trend-tick-label" x="523.3" y="151" text-anchor="middle">11-16</text><line class="trend-axis" x1="686.4" y1="136" x2="686.4" y2="140"/><text class="trend-tick-label" x="686.4" y="151" text-anchor="middle">11-22</text><line class="trend-axis" x1="768.0" y1="136" x2="768.0" y2="140"/><text class="trend-tick-label" x="768.0" y="151" text-anchor="middle">11-25</text>
+    <circle cx="34.0" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.22"/><text class="trend-bin-label" x="34.0" y="166" text-anchor="middle" fill-opacity="0.22">safety</text><circle cx="61.2" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.25"/><circle cx="88.4" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.27"/><circle cx="142.7" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.33"/><text class="trend-bin-label" x="142.7" y="166" text-anchor="middle" fill-opacity="0.33">cognitive sc…</text><circle cx="169.9" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.35"/><circle cx="197.1" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.38"/><circle cx="224.3" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.41"/><circle cx="251.5" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.43"/><text class="trend-bin-label" x="251.5" y="166" text-anchor="middle" fill-opacity="0.43">algorithms</text><circle cx="278.7" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.46"/><circle cx="305.9" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.49"/><circle cx="333.0" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.51"/><circle cx="360.2" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.54"/><text class="trend-bin-label" x="360.2" y="166" text-anchor="middle" fill-opacity="0.54">anthropic</text><circle cx="387.4" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.57"/><circle cx="414.6" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.59"/><circle cx="441.8" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.62"/><circle cx="469.0" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.65"/><text class="trend-bin-label" x="469.0" y="166" text-anchor="middle" fill-opacity="0.65">keynote</text><circle cx="523.3" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.70"/><circle cx="550.5" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.73"/><circle cx="604.9" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.78"/><text class="trend-bin-label" x="604.9" y="166" text-anchor="middle" fill-opacity="0.78">agency</text><circle cx="632.1" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.81"/><circle cx="659.3" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.83"/><circle cx="686.4" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.86"/><circle cx="713.6" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.89"/><text class="trend-bin-label" x="713.6" y="166" text-anchor="middle" fill-opacity="0.89">ai race</text><circle cx="740.8" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.91"/><circle cx="768.0" cy="136.0" r="2.1" fill="var(--muted)" fill-opacity="0.94"/>
+    <polyline fill="none" stroke="url(#dd-grad-0)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" points="34.0,125.1 61.2,125.1 88.4,125.1 115.6,125.1 142.7,125.1 169.9,119.6 197.1,119.6 224.3,114.2 251.5,114.2 278.7,114.2 305.9,114.2 333.0,108.7 360.2,97.8 387.4,97.8 414.6,92.4 441.8,81.5 469.0,81.5 496.1,81.5 523.3,76.0 550.5,59.6 577.7,59.6 604.9,48.7 632.1,48.7 659.3,37.8 686.4,37.8 713.6,26.9 740.8,21.5 768.0,16.0"/><circle cx="768.0" cy="16.0" r="3.2" fill="var(--accent)"/><polyline fill="none" stroke="url(#dd-grad-1)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" points="34.0,136.0 61.2,130.5 88.4,130.5 115.6,130.5 142.7,130.5 169.9,130.5 197.1,130.5 224.3,130.5 251.5,130.5 278.7,125.1 305.9,125.1 333.0,114.2 360.2,114.2 387.4,114.2 414.6,103.3 441.8,92.4 469.0,92.4 496.1,92.4 523.3,86.9 550.5,81.5 577.7,81.5 604.9,76.0 632.1,70.5 659.3,65.1 686.4,65.1 713.6,54.2 740.8,54.2 768.0,48.7"/><circle cx="768.0" cy="48.7" r="3.2" fill="var(--blue)"/><polyline fill="none" stroke="url(#dd-grad-2)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" points="34.0,130.5 61.2,125.1 88.4,125.1 115.6,125.1 142.7,125.1 169.9,119.6 197.1,119.6 224.3,114.2 251.5,114.2 278.7,114.2 305.9,114.2 333.0,114.2 360.2,108.7 387.4,108.7 414.6,108.7 441.8,108.7 469.0,108.7 496.1,108.7 523.3,103.3 550.5,92.4 577.7,92.4 604.9,86.9 632.1,81.5 659.3,70.5 686.4,70.5 713.6,70.5 740.8,70.5 768.0,65.1"/><circle cx="768.0" cy="65.1" r="3.2" fill="var(--amber)"/><polyline fill="none" stroke="url(#dd-grad-3)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" points="34.0,130.5 61.2,130.5 88.4,130.5 115.6,130.5 142.7,130.5 169.9,130.5 197.1,130.5 224.3,130.5 251.5,130.5 278.7,130.5 305.9,130.5 333.0,130.5 360.2,125.1 387.4,119.6 414.6,114.2 441.8,108.7 469.0,108.7 496.1,108.7 523.3,97.8 550.5,92.4 577.7,92.4 604.9,81.5 632.1,81.5 659.3,76.0 686.4,76.0 713.6,76.0 740.8,76.0 768.0,70.5"/><circle cx="768.0" cy="70.5" r="3.2" fill="var(--ink)"/><polyline fill="none" stroke="url(#dd-grad-4)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" points="34.0,136.0 61.2,136.0 88.4,125.1 115.6,125.1 142.7,119.6 169.9,119.6 197.1,119.6 224.3,114.2 251.5,114.2 278.7,114.2 305.9,114.2 333.0,114.2 360.2,103.3 387.4,97.8 414.6,97.8 441.8,97.8 469.0,97.8 496.1,97.8 523.3,97.8 550.5,97.8 577.7,97.8 604.9,92.4 632.1,86.9 659.3,86.9 686.4,81.5 713.6,81.5 740.8,81.5 768.0,81.5"/><circle cx="768.0" cy="81.5" r="3.2" fill="#8b5cf6"/><text class="trend-end-label" x="777" y="25.5" fill="var(--accent)">governance · 22</text><text class="trend-end-label" x="777" y="52.2" fill="var(--blue)">nvidia · 16</text><text class="trend-end-label" x="777" y="68.6" fill="var(--amber)">us–china · 13</text><text class="trend-end-label" x="777" y="82.1" fill="var(--ink)">ai safety · 12</text><text class="trend-end-label" x="777" y="95.6" fill="#8b5cf6">agents · 10</text>
+    <line id="trend-hover-line" class="trend-hover-line" x1="34" y1="16" x2="34" y2="136"/><rect class="trend-hover-zone" x="34.0" y="16" width="27.2" height="144" data-x="34.0" data-info="2026-10-29 · governance: 2 · us–china: 1 · ai safety: 1 · one-offs: safety, ai security"/><rect class="trend-hover-zone" x="47.6" y="16" width="27.2" height="144" data-x="61.2" data-info="2026-10-30 · governance: 2 · nvidia: 1 · us–china: 2 · ai safety: 1 · one-offs: anthropic, biography"/><rect class="trend-hover-zone" x="74.8" y="16" width="27.2" height="144" data-x="88.4" data-info="2026-10-31 · governance: 2 · nvidia: 1 · us–china: 2 · ai safety: 1 · agents: 2 · one-offs: cuba, deception"/><rect class="trend-hover-zone" x="102.0" y="16" width="27.2" height="144" data-x="115.6" data-info="2026-11-01 · governance: 2 · nvidia: 1 · us–china: 2 · ai safety: 1 · agents: 2"/><rect class="trend-hover-zone" x="129.1" y="16" width="27.2" height="144" data-x="142.7" data-info="2026-11-02 · governance: 2 · nvidia: 1 · us–china: 2 · ai safety: 1 · agents: 3 · one-offs: cognitive science, consciousness"/><rect class="trend-hover-zone" x="156.3" y="16" width="27.2" height="144" data-x="169.9" data-info="2026-11-03 · governance: 3 · nvidia: 1 · us–china: 3 · ai safety: 1 · agents: 3 · one-offs: elections, satire"/><rect class="trend-hover-zone" x="183.5" y="16" width="27.2" height="144" data-x="197.1" data-info="2026-11-04 · governance: 3 · nvidia: 1 · us–china: 3 · ai safety: 1 · agents: 3 · one-offs: economy, healthcare"/><rect class="trend-hover-zone" x="210.7" y="16" width="27.2" height="144" data-x="224.3" data-info="2026-11-05 · governance: 4 · nvidia: 1 · us–china: 4 · ai safety: 1 · agents: 4 · one-offs: ai elections, ai impact"/><rect class="trend-hover-zone" x="237.9" y="16" width="27.2" height="144" data-x="251.5" data-info="2026-11-06 · governance: 4 · nvidia: 1 · us–china: 4 · ai safety: 1 · agents: 4 · one-offs: algorithms, big tech"/><rect class="trend-hover-zone" x="265.1" y="16" width="27.2" height="144" data-x="278.7" data-info="2026-11-07 · governance: 4 · nvidia: 2 · us–china: 4 · ai safety: 1 · agents: 4 · one-offs: elections, finance"/><rect class="trend-hover-zone" x="292.3" y="16" width="27.2" height="144" data-x="305.9" data-info="2026-11-08 · governance: 4 · nvidia: 2 · us–china: 4 · ai safety: 1 · agents: 4 · one-offs: ai education, software development"/><rect class="trend-hover-zone" x="319.4" y="16" width="27.2" height="144" data-x="333.0" data-info="2026-11-09 · governance: 5 · nvidia: 4 · us–china: 4 · ai safety: 1 · agents: 4 · one-offs: data, espionage"/><rect class="trend-hover-zone" x="346.6" y="16" width="27.2" height="144" data-x="360.2" data-info="2026-11-10 · governance: 7 · nvidia: 4 · us–china: 5 · ai safety: 2 · agents: 6 · one-offs: anthropic, biden administration"/><rect class="trend-hover-zone" x="373.8" y="16" width="27.2" height="144" data-x="387.4" data-info="2026-11-11 · governance: 7 · nvidia: 4 · us–china: 5 · ai safety: 3 · agents: 7 · one-offs: collaboration, protocols"/><rect class="trend-hover-zone" x="401.0" y="16" width="27.2" height="144" data-x="414.6" data-info="2026-11-12 · governance: 8 · nvidia: 6 · us–china: 5 · ai safety: 4 · agents: 7 · one-offs: anthropic, defense"/><rect class="trend-hover-zone" x="428.2" y="16" width="27.2" height="144" data-x="441.8" data-info="2026-11-13 · governance: 10 · nvidia: 8 · us–china: 5 · ai safety: 5 · agents: 7 · one-offs: development, politics"/><rect class="trend-hover-zone" x="455.4" y="16" width="27.2" height="144" data-x="469.0" data-info="2026-11-14 · governance: 10 · nvidia: 8 · us–china: 5 · ai safety: 5 · agents: 7 · one-offs: keynote, safety"/><rect class="trend-hover-zone" x="482.6" y="16" width="27.2" height="144" data-x="496.1" data-info="2026-11-15 · governance: 10 · nvidia: 8 · us–china: 5 · ai safety: 5 · agents: 7"/><rect class="trend-hover-zone" x="509.7" y="16" width="27.2" height="144" data-x="523.3" data-info="2026-11-16 · governance: 11 · nvidia: 9 · us–china: 6 · ai safety: 7 · agents: 7 · one-offs: geopolitics, algorithmic safety"/><rect class="trend-hover-zone" x="536.9" y="16" width="27.2" height="144" data-x="550.5" data-info="2026-11-17 · governance: 14 · nvidia: 10 · us–china: 8 · ai safety: 8 · agents: 7 · one-offs: bipartisan support, compute &amp; chips"/><rect class="trend-hover-zone" x="564.1" y="16" width="27.2" height="144" data-x="577.7" data-info="2026-11-18 · governance: 14 · nvidia: 10 · us–china: 8 · ai safety: 8 · agents: 7"/><rect class="trend-hover-zone" x="591.3" y="16" width="27.2" height="144" data-x="604.9" data-info="2026-11-19 · governance: 16 · nvidia: 11 · us–china: 9 · ai safety: 10 · agents: 8 · one-offs: agency, cooperation"/><rect class="trend-hover-zone" x="618.5" y="16" width="27.2" height="144" data-x="632.1" data-info="2026-11-20 · governance: 16 · nvidia: 12 · us–china: 10 · ai safety: 10 · agents: 9 · one-offs: gta vi, iphone duo"/><rect class="trend-hover-zone" x="645.7" y="16" width="27.2" height="144" data-x="659.3" data-info="2026-11-21 · governance: 18 · nvidia: 13 · us–china: 12 · ai safety: 11 · agents: 9 · one-offs: compute &amp; chips, export controls"/><rect class="trend-hover-zone" x="672.9" y="16" width="27.2" height="144" data-x="686.4" data-info="2026-11-22 · governance: 18 · nvidia: 13 · us–china: 12 · ai safety: 11 · agents: 10 · one-offs: government automation, international comparisons"/><rect class="trend-hover-zone" x="700.0" y="16" width="27.2" height="144" data-x="713.6" data-info="2026-11-23 · governance: 20 · nvidia: 15 · us–china: 12 · ai safety: 11 · agents: 10 · one-offs: ai race, ceo succession"/><rect class="trend-hover-zone" x="727.2" y="16" width="27.2" height="144" data-x="740.8" data-info="2026-11-24 · governance: 21 · nvidia: 15 · us–china: 12 · ai safety: 11 · agents: 10 · one-offs: ai workforce, automated ai research"/><rect class="trend-hover-zone" x="754.4" y="16" width="15.6" height="144" data-x="768.0" data-info="2026-11-25 · governance: 22 · nvidia: 16 · us–china: 13 · ai safety: 12 · agents: 10 · one-offs: ai geopolitics, export controls"/>
+  </svg>
+</section>
+
+
+  <div class="filter-bar" role="toolbar" aria-label="Filter and search episodes">
+    <div class="filter-chips"><button type="button" class="chip-btn active" data-lane="all">All<span class="chip-count">(1)</span></button><button type="button" class="chip-btn" data-lane="geopolitics">Policy &amp; Geopolitics<span class="chip-count">(1)</span></button></div>
+    <div class="filter-controls">
+      <input type="search" class="stream-search" id="stream-search" placeholder="filter episodes..." aria-label="Filter episodes">
+      <button type="button" class="chip-btn" id="toggle-all-details">Expand all</button>
+    </div>
+  </div>
+
+  <div class="digest-layout">
+    <main class="stream">
+      
+<article class="ep-row" id="ep-20" data-lane="geopolitics" data-novelty="continuing" data-search="CSIS AI Policy Podcast Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon? Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang&#x27;s Nvidia reinstatement and a claimed Claude-aided Riemann proof. Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new. Opens with a news recap covering Jensen Huang&#x27;s reinstatement as Nvidia CEO, Anthropic&#x27;s IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source. Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek. Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of &#x27;perpetual overmatch&#x27;, alongside the possibility of Chinese retaliation. The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash. Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda. export-controls us-china-relations compute-governance ai-safety-regulation ai-geopolitics nvidia The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins) NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release) U.S. Tracked Alice Huang&#x27;s Contacts With China Spy Agency During Nvidia Affair (New York Times) Statement from Anthropic mathematician on solving the Riemann Hypothesis Superintelligence is Arriving (essay by Alexandr Wang) Perplexity and Intelligence (essay by Jakub Pachocki) Ben Buchanan Johns Hopkins SAIS">
+  <div class="ep-meta"><span class="lane-badge lane-amber">Policy &amp; Geopolitics</span><span class="ep-channel">CSIS AI Policy Podcast</span><span class="ep-dot">·</span><span>1h 15m</span><span class="ep-dot">·</span><span>Nov 25, 2026</span><span class="nov-badge nov-cont" title="Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.">CONTINUING</span><span class="tier-chip">show notes</span></div>
+  <h2 class="ep-title">Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?</h2>
+  <div class="guest-chip-row"><span class="guest-chip-label">Guest</span><button type="button" class="guest-chip" data-guest-id="5">Ben Buchanan <span class="g-aff">· Johns Hopkins SAIS</span></button></div>
+  <p class="ep-oneliner">Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang&#x27;s Nvidia reinstatement and a claimed Claude-aided Riemann proof.</p>
+  <details class="ep-details">
+    <summary><span class="ep-caret">▸</span> Details <span class="ep-summary-meta">· 5 bullets · 345 words · search transcript</span></summary>
+    <div class="ep-expanded-body">
+      <div class="ep-novelty-note"><strong>Why continuing:</strong> Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.</div>
+      <ul class="chevron-list"><li>Opens with a news recap covering Jensen Huang&#x27;s reinstatement as Nvidia CEO, Anthropic&#x27;s IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source.</li><li>Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek.</li><li>Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of &#x27;perpetual overmatch&#x27;, alongside the possibility of Chinese retaliation.</li><li>The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash.</li><li>Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda.</li></ul>
+      <div class="ep-tags"><span class="guest-chip-label" style="margin-right:2px;">Cited</span><span class="tech-tag work-tag">The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins)</span><span class="tech-tag work-tag">NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release)</span><span class="tech-tag work-tag">U.S. Tracked Alice Huang&#x27;s Contacts With China Spy Agency During Nvidia Affair (New York Times)</span><span class="tech-tag work-tag">Statement from Anthropic mathematician on solving the Riemann Hypothesis</span></div>
+      
+<div class="in-ep-search-box">
+  <div class="in-ep-search-bar">
+    <input type="search" class="ep-transcript-search"
+      data-ep-id="20"
+      data-transcript-src="transcripts/ep-20.js"
+      data-tier-label="show notes"
+      data-word-count="345"
+      placeholder="search inside this episode (show notes)..."
+      aria-label="Search inside Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?">
+    <span class="ep-search-status">ready · show notes (345 words)</span>
+  </div>
+  <div class="ep-search-hits"></div>
+</div>
+
+    </div>
+  </details>
+</article>
+
+      <div class="quiet-channels">Quiet in this issue: Dwarkesh Podcast, ChinaTalk, The Cognitive Revolution, Latent Space, Machine Learning Street Talk, AXRP, The AI Power Podcast, 80,000 Hours Podcast, Scaling Laws (Lawfare), The Spillover (CFR), Sharp Tech / Stratechery</div>
+    </main>
+
+    <div class="drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
+    <aside class="guest-sidebar" id="guest-sidebar" aria-label="Guest Intelligence">
+      <div class="sidebar-head">
+        <div class="sidebar-kicker">Guest Intelligence (1)</div>
+        <button type="button" class="sidebar-close" id="close-sidebar" aria-controls="guest-sidebar">Hide ›</button>
+      </div>
+      <input type="search" class="sidebar-search" id="guest-search" placeholder="filter name, org, expertise..." aria-label="Filter guests">
+      
+<div class="guest-card" id="guest-5" data-search="Ben Buchanan Assistant Professor · Johns Hopkins SAIS AI Policy Expert Former White House Special Advisor for AI, leading the development and execution of the Biden administration&#x27;s AI policy. Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity. Expert in the intersection of cybersecurity, artificial intelligence, and statecraft. CSIS AI Policy Podcast">
+  <div class="gc-head">
+    <div class="gc-name">Ben Buchanan</div>
+    <span class="status-badge badge-seen">SEEN · 2 eps</span>
+  </div>
+  <div class="gc-aff">Assistant Professor · Johns Hopkins SAIS</div>
+  <div class="gc-lens">AI Policy Expert</div>
+  <div class="gc-section-label">Expertise Backing</div><ul class="gc-evidence"><li>Former White House Special Advisor for AI, leading the development and execution of the Biden administration&#x27;s AI policy.<a class="cite-link" href="https://www.google.com/goto?url=CAEScgHEIkXXIBQEJphJV3DdXrO7tHrhOBP2Q3tI6frog8IJgJyH4G6iTzBkuTtxLOeePQscq3Zvll5AtRh2ruB-QK6QIfoh1d-7msqR9oYEZ_UZ8UvDta0I2ucdxOLiClUGzo1dC_EFrAV_ln9D6IsfRycfAQ" target="_blank" rel="noopener noreferrer">[Google Search ↗]</a></li><li>Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity.<span class="cite-muted">[episode bio]</span></li><li>Expert in the intersection of cybersecurity, artificial intelligence, and statecraft.<a class="cite-link" href="https://www.google.com/goto?url=CAESawHEIkXXf2XUELZCXRJI0dHSZDbEh8VQQz9gdCAIFjzthHuUb1k1FOPt6MYs9SjpUFsBKR2-4GksvfRx6T7TyYeM9y-EXMrqnUdZ-helmCy9nmQ9ArVzuxHgHESk25wIdCgxa7rjLm2tA1E0" target="_blank" rel="noopener noreferrer">[Google Search ↗]</a></li></ul>
+  <div class="gc-section-label">Today's Thesis</div><p class="gc-thesis">Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety.</p>
+  <div class="gc-shows"><a class="show-jump" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></div>
+</div>
+
+    </aside>
+  </div>
+
+  <footer class="page-footer">
+    <span>DailyDigest static artifact · data in <code>#digest-data</code> · Discovery radar: 2 breakout</span>
+    <span><a class="jump-link" href="../../../guests/index.html">Full Guest Directory →</a></span>
+  </footer>
+</div>
+
+<button type="button" class="edge-toggle edge-toggle-collapsed" id="open-sidebar" aria-controls="guest-sidebar">
+  ‹ Guests (1)
+</button>
+
+<script type="application/json" id="digest-data">
+{
+  "schema_version": 3,
+  "digest_date": "2026-11-25",
+  "taxonomy": [
+    {
+      "id": "flagship",
+      "label": "All-Rounder & Flagship",
+      "tone": "accent",
+      "description": "Long-form synthesis across frontier AI, compute, alignment, and geopolitics"
+    },
+    {
+      "id": "technical",
+      "label": "Frontier & Technical",
+      "tone": "blue",
+      "description": "Builders, ML theory, research papers, agents, and alignment research"
+    },
+    {
+      "id": "geopolitics",
+      "label": "Policy & Geopolitics",
+      "tone": "amber",
+      "description": "US–China competition, semiconductor export controls, governance, and national security"
+    },
+    {
+      "id": "strategy",
+      "label": "Markets & Tech Strategy",
+      "tone": "ink",
+      "description": "Platforms, chips, business models, and industry structure"
+    }
+  ],
+  "executive_summary": {
+    "headline": "CSIS's weekly AI policy show pairs Ben Buchanan's White House retrospective with news recaps of Jensen Huang's Nvidia reinstatement and a claimed Claude-assisted Riemann Hypothesis proof, most of it an extension of threads already running.",
+    "baseline_episode_count": 90,
+    "common_themes": [
+      {
+        "theme": "Buchanan on US-China AI strategy",
+        "summary": "Today's episode repeats Buchanan's earlier rounds on Biden-era export controls, compute governance and spending a US lead on safety, which also ran on The Cognitive Revolution (Nov 21) and The AI Power Podcast (Nov 10). Today's addition is the tie-in to the BIS remote-access rule and the Trump-Xi APEC talks.",
+        "refs": [
+          {
+            "item_id": 20,
+            "source_name": "CSIS AI Policy Podcast"
+          }
+        ]
+      },
+      {
+        "theme": "Nvidia leadership and export-control fallout",
+        "summary": "The Huang saga (resignation, spy affair, BIS remote-access rule) has run for roughly two weeks across many shows. Today's recap adds his reinstatement as CEO and board director.",
+        "refs": [
+          {
+            "item_id": 20,
+            "source_name": "CSIS AI Policy Podcast"
+          }
+        ]
+      }
+    ],
+    "technical_advances": [],
+    "legitimately_new": [
+      {
+        "signal": "Jensen Huang reinstated as Nvidia CEO",
+        "why_new": "The archive covers only his resignation and the aftermath; Nvidia's press release reversing it is a new development, and Sharp Tech's Nov 20 episode argued he wasn't coming back.",
+        "refs": [
+          {
+            "item_id": 20,
+            "source_name": "CSIS AI Policy Podcast"
+          }
+        ]
+      },
+      {
+        "signal": "Claimed Claude-assisted Riemann Hypothesis proof",
+        "why_new": "No prior archive coverage of an Anthropic mathematician's statement claiming Claude helped prove the Riemann Hypothesis, though the claim is only relayed in a news recap here.",
+        "refs": [
+          {
+            "item_id": 20,
+            "source_name": "CSIS AI Policy Podcast"
+          }
+        ]
+      }
+    ]
+  },
+  "discovery_items": [
+    {
+      "surface": "HN",
+      "title": "Matrix Multiplication is Θ(n^2.25) [pdf]",
+      "url": "https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf",
+      "domain": "github.com",
+      "engagement_label": "HN 834 pts · 458 comments",
+      "loudness_score": 80,
+      "domain_category": "Mathematics",
+      "why_notable": "A claimed tight bound for matrix multiplication near n^2.25 would be a major step in theoretical computer science and mathematics, and it is dominating technical discourse."
+    },
+    {
+      "surface": "News",
+      "title": "China's Shenzhou-24 mission launches 1st international astronaut to Tiangong space station",
+      "url": "https://www.space.com/space-exploration/human-spaceflight/china-shenzhou-24-first-international-astronaut-launch-tiangong-space-station",
+      "domain": "space.com",
+      "engagement_label": "Science News · space.com",
+      "loudness_score": 79,
+      "domain_category": "Space",
+      "why_notable": "The first international astronaut flying to China's Tiangong station is a milestone for crewed spaceflight and space geopolitics."
+    }
+  ],
+  "keyword_trends": {
+    "window_days": 28,
+    "start_date": "2026-10-29",
+    "end_date": "2026-11-25",
+    "dates": [
+      "2026-10-29",
+      "2026-10-30",
+      "2026-10-31",
+      "2026-11-01",
+      "2026-11-02",
+      "2026-11-03",
+      "2026-11-04",
+      "2026-11-05",
+      "2026-11-06",
+      "2026-11-07",
+      "2026-11-08",
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+      "2026-11-12",
+      "2026-11-13",
+      "2026-11-14",
+      "2026-11-15",
+      "2026-11-16",
+      "2026-11-17",
+      "2026-11-18",
+      "2026-11-19",
+      "2026-11-20",
+      "2026-11-21",
+      "2026-11-22",
+      "2026-11-23",
+      "2026-11-24",
+      "2026-11-25"
+    ],
+    "max_running": 22,
+    "series": [
+      {
+        "keyword": "governance",
+        "daily": [
+          2,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          0,
+          1,
+          2,
+          0,
+          0,
+          1,
+          3,
+          0,
+          2,
+          0,
+          2,
+          0,
+          2,
+          1,
+          1
+        ],
+        "running": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          5,
+          7,
+          7,
+          8,
+          10,
+          10,
+          10,
+          11,
+          14,
+          14,
+          16,
+          16,
+          18,
+          18,
+          20,
+          21,
+          22
+        ],
+        "total": 22
+      },
+      {
+        "keyword": "nvidia",
+        "daily": [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          2,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          2,
+          0,
+          1
+        ],
+        "running": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          4,
+          4,
+          4,
+          6,
+          8,
+          8,
+          8,
+          9,
+          10,
+          10,
+          11,
+          12,
+          13,
+          13,
+          15,
+          15,
+          16
+        ],
+        "total": 16
+      },
+      {
+        "keyword": "us–china",
+        "daily": [
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          0,
+          1,
+          1,
+          2,
+          0,
+          0,
+          0,
+          1
+        ],
+        "running": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          6,
+          8,
+          8,
+          9,
+          10,
+          12,
+          12,
+          12,
+          12,
+          13
+        ],
+        "total": 13
+      },
+      {
+        "keyword": "ai safety",
+        "daily": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          2,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        "running": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          3,
+          4,
+          5,
+          5,
+          5,
+          7,
+          8,
+          8,
+          10,
+          10,
+          11,
+          11,
+          11,
+          11,
+          12
+        ],
+        "total": 12
+      },
+      {
+        "keyword": "agents",
+        "daily": [
+          0,
+          0,
+          2,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          2,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "running": [
+          0,
+          0,
+          2,
+          2,
+          3,
+          3,
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          6,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          8,
+          9,
+          9,
+          10,
+          10,
+          10,
+          10
+        ],
+        "total": 10
+      }
+    ],
+    "daily_bins": [
+      {
+        "date": "2026-10-29",
+        "label": "safety",
+        "ephemeral_keywords": [
+          "safety",
+          "ai security",
+          "anthropic"
+        ],
+        "total_hits": 16
+      },
+      {
+        "date": "2026-10-30",
+        "label": "anthropic",
+        "ephemeral_keywords": [
+          "anthropic",
+          "biography",
+          "defense"
+        ],
+        "total_hits": 9
+      },
+      {
+        "date": "2026-10-31",
+        "label": "cuba",
+        "ephemeral_keywords": [
+          "cuba",
+          "deception",
+          "defense"
+        ],
+        "total_hits": 9
+      },
+      {
+        "date": "2026-11-01",
+        "label": "",
+        "ephemeral_keywords": [],
+        "total_hits": 0
+      },
+      {
+        "date": "2026-11-02",
+        "label": "cognitive science",
+        "ephemeral_keywords": [
+          "cognitive science",
+          "consciousness",
+          "data privacy"
+        ],
+        "total_hits": 6
+      },
+      {
+        "date": "2026-11-03",
+        "label": "elections",
+        "ephemeral_keywords": [
+          "elections",
+          "satire",
+          "scaling & rl"
+        ],
+        "total_hits": 6
+      },
+      {
+        "date": "2026-11-04",
+        "label": "economy",
+        "ephemeral_keywords": [
+          "economy",
+          "healthcare",
+          "inflation"
+        ],
+        "total_hits": 4
+      },
+      {
+        "date": "2026-11-05",
+        "label": "ai elections",
+        "ephemeral_keywords": [
+          "ai elections",
+          "ai impact",
+          "biosecurity"
+        ],
+        "total_hits": 12
+      },
+      {
+        "date": "2026-11-06",
+        "label": "algorithms",
+        "ephemeral_keywords": [
+          "algorithms",
+          "big tech",
+          "biology"
+        ],
+        "total_hits": 10
+      },
+      {
+        "date": "2026-11-07",
+        "label": "elections",
+        "ephemeral_keywords": [
+          "elections",
+          "finance"
+        ],
+        "total_hits": 3
+      },
+      {
+        "date": "2026-11-08",
+        "label": "ai education",
+        "ephemeral_keywords": [
+          "ai education",
+          "software development",
+          "stanford"
+        ],
+        "total_hits": 3
+      },
+      {
+        "date": "2026-11-09",
+        "label": "data",
+        "ephemeral_keywords": [
+          "data",
+          "espionage",
+          "politics"
+        ],
+        "total_hits": 7
+      },
+      {
+        "date": "2026-11-10",
+        "label": "anthropic",
+        "ephemeral_keywords": [
+          "anthropic",
+          "biden administration",
+          "cloudflare"
+        ],
+        "total_hits": 15
+      },
+      {
+        "date": "2026-11-11",
+        "label": "collaboration",
+        "ephemeral_keywords": [
+          "collaboration",
+          "protocols"
+        ],
+        "total_hits": 4
+      },
+      {
+        "date": "2026-11-12",
+        "label": "anthropic",
+        "ephemeral_keywords": [
+          "anthropic",
+          "defense",
+          "affair"
+        ],
+        "total_hits": 14
+      },
+      {
+        "date": "2026-11-13",
+        "label": "development",
+        "ephemeral_keywords": [
+          "development",
+          "politics"
+        ],
+        "total_hits": 7
+      },
+      {
+        "date": "2026-11-14",
+        "label": "keynote",
+        "ephemeral_keywords": [
+          "keynote",
+          "safety"
+        ],
+        "total_hits": 2
+      },
+      {
+        "date": "2026-11-15",
+        "label": "",
+        "ephemeral_keywords": [],
+        "total_hits": 0
+      },
+      {
+        "date": "2026-11-16",
+        "label": "geopolitics",
+        "ephemeral_keywords": [
+          "geopolitics",
+          "algorithmic safety",
+          "anthropic"
+        ],
+        "total_hits": 18
+      },
+      {
+        "date": "2026-11-17",
+        "label": "bipartisan support",
+        "ephemeral_keywords": [
+          "bipartisan support",
+          "compute & chips",
+          "employment impact"
+        ],
+        "total_hits": 14
+      },
+      {
+        "date": "2026-11-18",
+        "label": "",
+        "ephemeral_keywords": [],
+        "total_hits": 0
+      },
+      {
+        "date": "2026-11-19",
+        "label": "agency",
+        "ephemeral_keywords": [
+          "agency",
+          "cooperation",
+          "customer support"
+        ],
+        "total_hits": 22
+      },
+      {
+        "date": "2026-11-20",
+        "label": "gta vi",
+        "ephemeral_keywords": [
+          "gta vi",
+          "iphone duo",
+          "united airlines"
+        ],
+        "total_hits": 6
+      },
+      {
+        "date": "2026-11-21",
+        "label": "compute & chips",
+        "ephemeral_keywords": [
+          "compute & chips",
+          "export controls",
+          "geopolitics"
+        ],
+        "total_hits": 9
+      },
+      {
+        "date": "2026-11-22",
+        "label": "government automation",
+        "ephemeral_keywords": [
+          "government automation",
+          "international comparisons",
+          "public services"
+        ],
+        "total_hits": 5
+      },
+      {
+        "date": "2026-11-23",
+        "label": "ai race",
+        "ephemeral_keywords": [
+          "ai race",
+          "ceo succession",
+          "entity list"
+        ],
+        "total_hits": 10
+      },
+      {
+        "date": "2026-11-24",
+        "label": "ai workforce",
+        "ephemeral_keywords": [
+          "ai workforce",
+          "automated ai research",
+          "compute & chips"
+        ],
+        "total_hits": 11
+      },
+      {
+        "date": "2026-11-25",
+        "label": "ai geopolitics",
+        "ephemeral_keywords": [
+          "ai geopolitics",
+          "export controls"
+        ],
+        "total_hits": 6
+      }
+    ]
+  },
+  "stats": {
+    "episode_count": 1,
+    "guest_count": 1,
+    "returning_guest_count": 1,
+    "new_signal_count": 0,
+    "discovery_count": 2,
+    "active_source_count": 1
+  },
+  "episodes": [
+    {
+      "item_id": 20,
+      "source_slug": "csis-ai-policy",
+      "source_name": "CSIS AI Policy Podcast",
+      "category": "geopolitics",
+      "category_label": "Policy & Geopolitics",
+      "category_tone": "amber",
+      "title": "Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?",
+      "url": "",
+      "published_at": "2026-11-25T10:00:00+00:00",
+      "duration_sec": 4525,
+      "transcript_tier": "show_notes_only",
+      "transcript_words": 345,
+      "one_liner": "Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang's Nvidia reinstatement and a claimed Claude-aided Riemann proof.",
+      "novelty_label": "continuing",
+      "novelty_reason": "Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.",
+      "bullets": [
+        "Opens with a news recap covering Jensen Huang's reinstatement as Nvidia CEO, Anthropic's IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source.",
+        "Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek.",
+        "Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of 'perpetual overmatch', alongside the possibility of Chinese retaliation.",
+        "The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash.",
+        "Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda."
+      ],
+      "topics": [
+        "export-controls",
+        "us-china-relations",
+        "compute-governance",
+        "ai-safety-regulation",
+        "ai-geopolitics",
+        "nvidia"
+      ],
+      "referenced_works": [
+        "The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins)",
+        "NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release)",
+        "U.S. Tracked Alice Huang's Contacts With China Spy Agency During Nvidia Affair (New York Times)",
+        "Statement from Anthropic mathematician on solving the Riemann Hypothesis",
+        "Superintelligence is Arriving (essay by Alexandr Wang)",
+        "Perplexity and Intelligence (essay by Jakub Pachocki)"
+      ],
+      "guests": [
+        {
+          "person_id": 5,
+          "name": "Ben Buchanan",
+          "affiliation": "Johns Hopkins SAIS",
+          "role_title": "Assistant Professor",
+          "core_thesis": "Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety."
+        }
+      ]
+    }
+  ],
+  "guests": [
+    {
+      "person_id": 5,
+      "name": "Ben Buchanan",
+      "affiliation": "Johns Hopkins SAIS",
+      "role_title": "Assistant Professor",
+      "role_lens": "AI Policy Expert",
+      "expertise_backing": [
+        {
+          "claim": "Former White House Special Advisor for AI, leading the development and execution of the Biden administration's AI policy.",
+          "source_url": "https://www.google.com/goto?url=CAEScgHEIkXXIBQEJphJV3DdXrO7tHrhOBP2Q3tI6frog8IJgJyH4G6iTzBkuTtxLOeePQscq3Zvll5AtRh2ruB-QK6QIfoh1d-7msqR9oYEZ_UZ8UvDta0I2ucdxOLiClUGzo1dC_EFrAV_ln9D6IsfRycfAQ",
+          "source_label": "Google Search"
+        },
+        {
+          "claim": "Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity.",
+          "source_url": null,
+          "source_label": "episode bio"
+        },
+        {
+          "claim": "Expert in the intersection of cybersecurity, artificial intelligence, and statecraft.",
+          "source_url": "https://www.google.com/goto?url=CAESawHEIkXXf2XUELZCXRJI0dHSZDbEh8VQQz9gdCAIFjzthHuUb1k1FOPt6MYs9SjpUFsBKR2-4GksvfRx6T7TyYeM9y-EXMrqnUdZ-helmCy9nmQ9ArVzuxHgHESk25wIdCgxa7rjLm2tA1E0",
+          "source_label": "Google Search"
+        }
+      ],
+      "total_appearances": 2,
+      "distinct_sources": 2,
+      "appearances": [
+        {
+          "item_id": 20,
+          "source_slug": "csis-ai-policy",
+          "source_name": "CSIS AI Policy Podcast",
+          "item_title": "Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?",
+          "core_thesis": "Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety.",
+          "stated_bio": "Former White House Special Advisor for AI in the Biden Administration; co-author of The Bitter Struggle."
+        }
+      ]
+    }
+  ],
+  "quiet_sources": [
+    {
+      "slug": "dwarkesh",
+      "name": "Dwarkesh Podcast",
+      "category": "flagship"
+    },
+    {
+      "slug": "chinatalk",
+      "name": "ChinaTalk",
+      "category": "flagship"
+    },
+    {
+      "slug": "cognitive-revolution",
+      "name": "The Cognitive Revolution",
+      "category": "flagship"
+    },
+    {
+      "slug": "latent-space",
+      "name": "Latent Space",
+      "category": "technical"
+    },
+    {
+      "slug": "mlst",
+      "name": "Machine Learning Street Talk",
+      "category": "technical"
+    },
+    {
+      "slug": "axrp",
+      "name": "AXRP",
+      "category": "technical"
+    },
+    {
+      "slug": "ai-power",
+      "name": "The AI Power Podcast",
+      "category": "geopolitics"
+    },
+    {
+      "slug": "80000-hours",
+      "name": "80,000 Hours Podcast",
+      "category": "geopolitics"
+    },
+    {
+      "slug": "scaling-laws",
+      "name": "Scaling Laws (Lawfare)",
+      "category": "geopolitics"
+    },
+    {
+      "slug": "the-spillover",
+      "name": "The Spillover (CFR)",
+      "category": "geopolitics"
+    },
+    {
+      "slug": "sharp-tech",
+      "name": "Sharp Tech / Stratechery",
+      "category": "strategy"
+    }
+  ]
+}
+</script>
+
+<script>
+(function() {
+  var btn = document.getElementById('theme-toggle');
+  function currentTheme() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  function updateLabel() {
+    if (!btn) return;
+    var cur = currentTheme();
+    btn.textContent = cur === 'dark' ? 'Light ☀' : 'Dark ◐';
+    btn.setAttribute('aria-label', 'Switch to ' + (cur === 'dark' ? 'light' : 'dark') + ' theme');
+  }
+  if (btn) {
+    btn.addEventListener('click', function() {
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('dd-theme', next); } catch (e) {}
+      updateLabel();
+    });
+  }
+  updateLabel();
+})();
+</script>
+
+
+<script>
+window.__DD_TRANSCRIPTS__ = window.__DD_TRANSCRIPTS__ || {};
+(function() {
+  // 1. Collapsible Side-Toggled Guest Intelligence Sidebar
+  var openBtn = document.getElementById('open-sidebar');
+  var closeBtn = document.getElementById('close-sidebar');
+  var backdrop = document.getElementById('drawer-backdrop');
+  var isWide = window.innerWidth > 980;
+  var saved = null;
+  try { saved = localStorage.getItem('dd-sidebar'); } catch (e) {}
+
+  function setSidebar(open) {
+    document.body.classList.toggle('sidebar-open', open);
+    if (openBtn) openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (closeBtn) closeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    try { localStorage.setItem('dd-sidebar', open ? 'open' : 'closed'); } catch (e) {}
+  }
+
+  if (saved === 'open' || (saved === null && isWide)) {
+    setSidebar(true);
+  } else {
+    setSidebar(false);
+  }
+
+  if (openBtn) openBtn.addEventListener('click', function() { setSidebar(true); });
+  if (closeBtn) closeBtn.addEventListener('click', function() { setSidebar(false); });
+  if (backdrop) backdrop.addEventListener('click', function() { setSidebar(false); });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && window.innerWidth <= 980 && document.body.classList.contains('sidebar-open')) {
+      setSidebar(false);
+    }
+  });
+
+  // 2. Combined Taxonomy Lane + Novelty + Stream Search Filter
+  var laneBtns = document.querySelectorAll('button.chip-btn[data-lane]');
+  var novelBtn = document.getElementById('filter-new-signal');
+  var streamSearch = document.getElementById('stream-search');
+  var rows = document.querySelectorAll('article.ep-row');
+  var activeLane = 'all';
+  var onlyNewSignal = false;
+
+  function applyStreamFilters() {
+    var q = streamSearch ? streamSearch.value.trim().toLowerCase() : '';
+    rows.forEach(function(r) {
+      var laneOk = activeLane === 'all' || r.getAttribute('data-lane') === activeLane;
+      var novOk = !onlyNewSignal || r.getAttribute('data-novelty') === 'new_signal';
+      var hay = (r.getAttribute('data-search') || '').toLowerCase();
+      var textOk = q === '' || hay.indexOf(q) !== -1;
+      var visible = laneOk && novOk && textOk;
+      r.classList.toggle('hidden', !visible);
+      if (visible && q.length >= 2) {
+        var det = r.querySelector('details.ep-details');
+        if (det) det.open = true;
+      }
+    });
+  }
+
+  laneBtns.forEach(function(b) {
+    b.addEventListener('click', function() {
+      laneBtns.forEach(function(x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      activeLane = b.getAttribute('data-lane') || 'all';
+      applyStreamFilters();
+    });
+  });
+
+  if (novelBtn) {
+    novelBtn.addEventListener('click', function() {
+      onlyNewSignal = !onlyNewSignal;
+      novelBtn.classList.toggle('active', onlyNewSignal);
+      applyStreamFilters();
+    });
+  }
+
+  if (streamSearch) {
+    streamSearch.addEventListener('input', applyStreamFilters);
+  }
+
+  // 3. Expand All / Collapse All Toggle
+  var toggleAllBtn = document.getElementById('toggle-all-details');
+  var allExpanded = false;
+  if (toggleAllBtn) {
+    toggleAllBtn.addEventListener('click', function() {
+      allExpanded = !allExpanded;
+      document.querySelectorAll('article.ep-row:not(.hidden) details.ep-details').forEach(function(d) {
+        d.open = allExpanded;
+      });
+      toggleAllBtn.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+    });
+  }
+
+  // 4. Click Guest Chip -> Open Sidebar + Focus & Scroll to Guest Dossier
+  var searchInput = document.getElementById('guest-search');
+  var guestCards = document.querySelectorAll('.guest-card');
+  function focusGuest(guestId) {
+    setSidebar(true);
+    if (searchInput && searchInput.value) {
+      searchInput.value = '';
+      guestCards.forEach(function(c) { c.classList.remove('hidden'); });
+    }
+    guestCards.forEach(function(c) { c.classList.remove('focused'); });
+    var target = document.getElementById('guest-' + guestId);
+    if (target) {
+      target.classList.add('focused');
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+  document.querySelectorAll('button.guest-chip[data-guest-id]').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      focusGuest(chip.getAttribute('data-guest-id'));
+    });
+  });
+
+  // 5. Jump Links (from Executive Brief OR Sidebar Guest Card) -> Expand & Flash Target Episode
+  function jumpToEpisode(epId) {
+    var epEl = document.getElementById('ep-' + epId);
+    if (!epEl) return;
+    if (epEl.classList.contains('hidden')) {
+      activeLane = 'all';
+      onlyNewSignal = false;
+      laneBtns.forEach(function(x) { x.classList.toggle('active', x.getAttribute('data-lane') === 'all'); });
+      if (novelBtn) novelBtn.classList.remove('active');
+      if (streamSearch) streamSearch.value = '';
+      applyStreamFilters();
+    }
+    var det = epEl.querySelector('details.ep-details');
+    if (det) det.open = true;
+    epEl.classList.remove('flash');
+    void epEl.offsetWidth;
+    epEl.classList.add('flash');
+    setTimeout(function() { epEl.classList.remove('flash'); }, 1800);
+    if (window.innerWidth <= 980) setSidebar(false);
+  }
+
+  document.querySelectorAll('a.show-jump[data-ep-id], a.eb-ref-chip[data-ep-id]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      jumpToEpisode(link.getAttribute('data-ep-id'));
+    });
+  });
+
+  // 6. Live Sidebar Guest Filter
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var q = searchInput.value.trim().toLowerCase();
+      guestCards.forEach(function(card) {
+        var hay = (card.getAttribute('data-search') || '').toLowerCase();
+        card.classList.toggle('hidden', q !== '' && hay.indexOf(q) === -1);
+      });
+    });
+  }
+
+  // 7. Per-Episode "Search in Episode" (lazy-loads transcripts/ep-<id>.js; works over file:// & HTTP)
+  var loadingScripts = {};
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function loadTranscriptScript(epId, scriptPath, cb) {
+    if (Object.prototype.hasOwnProperty.call(window.__DD_TRANSCRIPTS__, epId)) {
+      cb(window.__DD_TRANSCRIPTS__[epId]);
+      return;
+    }
+    if (loadingScripts[epId]) {
+      loadingScripts[epId].push(cb);
+      return;
+    }
+    loadingScripts[epId] = [cb];
+    var s = document.createElement('script');
+    s.src = scriptPath;
+    s.onload = function() {
+      var text = window.__DD_TRANSCRIPTS__[epId] || '';
+      var cbs = loadingScripts[epId] || [];
+      delete loadingScripts[epId];
+      cbs.forEach(function(fn) { fn(text); });
+    };
+    s.onerror = function() {
+      window.__DD_TRANSCRIPTS__[epId] = '';
+      var cbs = loadingScripts[epId] || [];
+      delete loadingScripts[epId];
+      cbs.forEach(function(fn) { fn(''); });
+    };
+    document.body.appendChild(s);
+  }
+
+  function renderEpisodeMatches(text, query, statusEl, hitsEl, tierLabel, wordCount) {
+    hitsEl.innerHTML = '';
+    if (!query || query.length < 2) {
+      statusEl.textContent = wordCount > 0 ? ('ready · ' + tierLabel + ' (' + wordCount.toLocaleString() + ' words)') : '';
+      return;
+    }
+    if (!text) {
+      statusEl.textContent = 'No transcript text available for this episode.';
+      return;
+    }
+    var lower = text.toLowerCase();
+    var qLower = query.toLowerCase();
+    var positions = [];
+    var idx = 0;
+    while ((idx = lower.indexOf(qLower, idx)) !== -1) {
+      positions.push(idx);
+      idx += qLower.length;
+      if (positions.length >= 200) break;
+    }
+    if (positions.length === 0) {
+      statusEl.textContent = '0 matches in ' + tierLabel + '.';
+      return;
+    }
+    var shown = Math.min(positions.length, 8);
+    statusEl.textContent = positions.length + (positions.length >= 200 ? '+' : '') + ' matches (showing ' + shown + ')';
+    for (var i = 0; i < shown; i++) {
+      var pos = positions[i];
+      var start = Math.max(0, pos - 95);
+      var end = Math.min(text.length, pos + query.length + 125);
+      var before = escapeHtml(text.slice(start, pos));
+      var match = escapeHtml(text.slice(pos, pos + query.length));
+      var after = escapeHtml(text.slice(pos + query.length, end));
+      var div = document.createElement('div');
+      div.className = 'ep-hit';
+      div.innerHTML = (start > 0 ? '…' : '') + before + '<mark>' + match + '</mark>' + after + (end < text.length ? '…' : '');
+      hitsEl.appendChild(div);
+    }
+  }
+
+  document.querySelectorAll('input.ep-transcript-search').forEach(function(inp) {
+    var timer = null;
+    inp.addEventListener('input', function() {
+      clearTimeout(timer);
+      timer = setTimeout(function() {
+        var epId = inp.getAttribute('data-ep-id');
+        var src = inp.getAttribute('data-transcript-src');
+        var tierLabel = inp.getAttribute('data-tier-label') || 'transcript';
+        var wordCount = parseInt(inp.getAttribute('data-word-count') || '0', 10);
+        var box = inp.closest('.in-ep-search-box');
+        var statusEl = box.querySelector('.ep-search-status');
+        var hitsEl = box.querySelector('.ep-search-hits');
+        var q = inp.value.trim();
+        if (q.length < 2) {
+          renderEpisodeMatches('', q, statusEl, hitsEl, tierLabel, wordCount);
+          return;
+        }
+        statusEl.textContent = 'loading ' + tierLabel + '...';
+        loadTranscriptScript(epId, src, function(text) {
+          renderEpisodeMatches(text, q, statusEl, hitsEl, tierLabel, wordCount);
+        });
+      }, 150);
+    });
+  });
+  // 8. Minimal Keyword Momentum Plot Hover Readout
+  var trendSvg = document.querySelector('.trend-svg');
+  var trendReadout = document.getElementById('trend-readout');
+  var hoverLine = document.getElementById('trend-hover-line');
+  if (trendSvg && trendReadout) {
+    var defaultReadout = trendReadout.textContent;
+    trendSvg.querySelectorAll('.trend-hover-zone').forEach(function(zone) {
+      zone.addEventListener('mouseenter', function() {
+        var x = zone.getAttribute('data-x');
+        var info = zone.getAttribute('data-info') || '';
+        if (hoverLine && x) {
+          hoverLine.setAttribute('x1', x);
+          hoverLine.setAttribute('x2', x);
+          hoverLine.style.opacity = '1';
+        }
+        trendReadout.textContent = info;
+      });
+    });
+    trendSvg.addEventListener('mouseleave', function() {
+      if (hoverLine) hoverLine.style.opacity = '0';
+      trendReadout.textContent = defaultReadout;
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
