@@ -185,6 +185,31 @@ a.pill, button.pill {
 }
 a.pill:hover, button.pill:hover { background: var(--pill-hover); }
 a.pill.active { background: var(--ink); color: var(--bg); }
+.pill-disabled {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--faint);
+  background: transparent;
+  border: 1.5px solid var(--hairline-strong);
+  border-radius: 999px;
+  height: 30px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.45;
+  cursor: default;
+  user-select: none;
+}
+.jump-disabled {
+  font-size: 12px;
+  color: var(--faint);
+  opacity: 0.45;
+  padding: 4px 7px;
+  cursor: default;
+  user-select: none;
+}
 
 a.pill:focus-visible, button.pill:focus-visible, button.chip-btn:focus-visible,
 button.guest-chip:focus-visible, button.edge-toggle:focus-visible, input:focus-visible,
@@ -953,9 +978,9 @@ footer.page-footer {
 <div class="wrap digest-wrap">
   
 <nav class="topbar" aria-label="Primary navigation">
-  <div class="nav-links"><a class="pill active" href="../../../index.html">Latest</a><a class="pill" href="../../../archive.html">Archive</a><a class="pill" href="../../../guests/index.html">Guests</a></div>
+  <div class="nav-links"><a class="pill" href="https://github.com/lintelligences" target="_blank" rel="noopener noreferrer">← Profile ↗</a><span class="pill active" aria-current="page">Latest</span><span class="pill-disabled" aria-disabled="true" title="Archive is kept locally; public page serves the latest daily only">Archive</span><span class="pill-disabled" aria-disabled="true" title="Full guest directory is kept locally; use the Guests sidebar for today's guests">Guests</span></div>
   <div class="nav-actions">
-    <a class="jump-link" href="../../../digests/2026/11/2026-11-24.html">← 2026-11-24</a>
+    <span class="jump-disabled" aria-disabled="true" title="Rolling archive is kept locally">← Prev · Next →</span>
     <button type="button" class="pill" id="theme-toggle">Dark ◐</button>
   </div>
 </nav>
@@ -966,9 +991,9 @@ footer.page-footer {
     <div class="kicker">DISCOVERY · DAILY DIGEST</div>
     <h1 class="page-title">2026-11-25</h1>
     <div class="masthead-sub">
-      <span><strong>1</strong> episodes</span>
+      <span><strong>0</strong> episodes</span>
       <span>·</span>
-      <span><strong>1</strong> guests tracked</span>
+      <span><strong>0</strong> guests tracked</span>
       
       <span>·</span>
       <span>Frontier AI, compute, policy &amp; geopolitics — distilled from transcripts with guest expertise tracking.</span>
@@ -979,10 +1004,10 @@ footer.page-footer {
 <section class="exec-brief" aria-label="Executive Brief">
   <div class="eb-top">
     <div class="eb-kicker">Executive Brief</div>
-    <div class="eb-baseline">vs. 90 recent archive episodes</div>
+    <div class="eb-baseline">seed issue</div>
   </div>
-  <div class="eb-headline">CSIS&#x27;s weekly AI policy show pairs Ben Buchanan&#x27;s White House retrospective with news recaps of Jensen Huang&#x27;s Nvidia reinstatement and a claimed Claude-assisted Riemann Hypothesis proof, most of it an extension of threads already running.</div>
-  <div class="eb-flow"><div class="eb-block"><div class="eb-col-title eb-title-new">New Signal</div><ul class="eb-list"><li><span class="eb-item-lead">Jensen Huang reinstated as Nvidia CEO:</span> <span class="eb-item-desc">The archive covers only his resignation and the aftermath; Nvidia&#x27;s press release reversing it is a new development, and Sharp Tech&#x27;s Nov 20 episode argued he wasn&#x27;t coming back.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li><li><span class="eb-item-lead">Claimed Claude-assisted Riemann Hypothesis proof:</span> <span class="eb-item-desc">No prior archive coverage of an Anthropic mathematician&#x27;s statement claiming Claude helped prove the Riemann Hypothesis, though the claim is only relayed in a news recap here.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li></ul></div><div class="eb-block"><div class="eb-col-title">Themes</div><ul class="eb-list"><li><span class="eb-item-lead">Buchanan on US-China AI strategy:</span> <span class="eb-item-desc">Today&#x27;s episode repeats Buchanan&#x27;s earlier rounds on Biden-era export controls, compute governance and spending a US lead on safety, which also ran on The Cognitive Revolution (Nov 21) and The AI Power Podcast (Nov 10). Today&#x27;s addition is the tie-in to the BIS remote-access rule and the Trump-Xi APEC talks.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li><li><span class="eb-item-lead">Nvidia leadership and export-control fallout:</span> <span class="eb-item-desc">The Huang saga (resignation, spy affair, BIS remote-access rule) has run for roughly two weeks across many shows. Today&#x27;s recap adds his reinstatement as CEO and board director.</span><span class="eb-refs"><a class="eb-ref-chip" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></span></li></ul></div><div class="eb-block"><div class="eb-col-title eb-title-radar">Discovery</div><ul class="eb-list eb-list-radar"><li><span class="radar-cat">Mathematics</span><span class="eb-item-lead"><a href="https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf" target="_blank" rel="noopener noreferrer">Matrix Multiplication is Θ(n^2.25) [pdf]<span class="ext-arrow">↗</span></a></span><span class="radar-metric">HN 834 pts · 458 comments</span> <span class="eb-item-desc">— A claimed tight bound for matrix multiplication near n^2.25 would be a major step in theoretical computer science and mathematics, and it is dominating technical discourse.</span></li><li><span class="radar-cat">Space</span><span class="eb-item-lead"><a href="https://www.space.com/space-exploration/human-spaceflight/china-shenzhou-24-first-international-astronaut-launch-tiangong-space-station" target="_blank" rel="noopener noreferrer">China&#x27;s Shenzhou-24 mission launches 1st international astronaut to Tiangong space station<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Science News · space.com</span> <span class="eb-item-desc">— The first international astronaut flying to China&#x27;s Tiangong station is a milestone for crewed spaceflight and space geopolitics.</span></li></ul></div></div>
+  
+  <div class="eb-flow"><div class="eb-block"><div class="eb-col-title eb-title-radar">Discovery</div><ul class="eb-list eb-list-radar"><li><span class="radar-cat">Space</span><span class="eb-item-lead"><a href="https://www.nbcnews.com/world/china/china-shenzhou-24-spacecraft-docks-space-station-foreign-astronaut-rcna611251" target="_blank" rel="noopener noreferrer">China’s Shenzhou 24 spacecraft docks at space station with first foreign astronaut<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Science News · nbcnews.com</span> <span class="eb-item-desc">— The first foreign astronaut aboard China&#x27;s Tiangong station marks a historic shift in international human spaceflight cooperation.</span></li><li><span class="radar-cat">Mathematics</span><span class="eb-item-lead"><a href="https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf" target="_blank" rel="noopener noreferrer">Matrix Multiplication is Θ(n^2.25) [pdf]<span class="ext-arrow">↗</span></a></span><span class="radar-metric">HN 878 pts · 491 comments</span> <span class="eb-item-desc">— A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science, though it is unverified and drawing intense scrutiny.</span></li></ul></div></div>
 </section>
 
   
@@ -1002,7 +1027,7 @@ footer.page-footer {
 
 
   <div class="filter-bar" role="toolbar" aria-label="Filter and search episodes">
-    <div class="filter-chips"><button type="button" class="chip-btn active" data-lane="all">All<span class="chip-count">(1)</span></button><button type="button" class="chip-btn" data-lane="geopolitics">Policy &amp; Geopolitics<span class="chip-count">(1)</span></button></div>
+    <div class="filter-chips"><button type="button" class="chip-btn active" data-lane="all">All<span class="chip-count">(0)</span></button></div>
     <div class="filter-controls">
       <input type="search" class="stream-search" id="stream-search" placeholder="filter episodes..." aria-label="Filter episodes">
       <button type="button" class="chip-btn" id="toggle-all-details">Expand all</button>
@@ -1011,71 +1036,29 @@ footer.page-footer {
 
   <div class="digest-layout">
     <main class="stream">
-      
-<article class="ep-row" id="ep-20" data-lane="geopolitics" data-novelty="continuing" data-search="CSIS AI Policy Podcast Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon? Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang&#x27;s Nvidia reinstatement and a claimed Claude-aided Riemann proof. Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new. Opens with a news recap covering Jensen Huang&#x27;s reinstatement as Nvidia CEO, Anthropic&#x27;s IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source. Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek. Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of &#x27;perpetual overmatch&#x27;, alongside the possibility of Chinese retaliation. The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash. Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda. export-controls us-china-relations compute-governance ai-safety-regulation ai-geopolitics nvidia The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins) NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release) U.S. Tracked Alice Huang&#x27;s Contacts With China Spy Agency During Nvidia Affair (New York Times) Statement from Anthropic mathematician on solving the Riemann Hypothesis Superintelligence is Arriving (essay by Alexandr Wang) Perplexity and Intelligence (essay by Jakub Pachocki) Ben Buchanan Johns Hopkins SAIS">
-  <div class="ep-meta"><span class="lane-badge lane-amber">Policy &amp; Geopolitics</span><span class="ep-channel">CSIS AI Policy Podcast</span><span class="ep-dot">·</span><span>1h 15m</span><span class="ep-dot">·</span><span>Nov 25, 2026</span><span class="nov-badge nov-cont" title="Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.">CONTINUING</span><span class="tier-chip">show notes</span></div>
-  <h2 class="ep-title">Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?</h2>
-  <div class="guest-chip-row"><span class="guest-chip-label">Guest</span><button type="button" class="guest-chip" data-guest-id="5">Ben Buchanan <span class="g-aff">· Johns Hopkins SAIS</span></button></div>
-  <p class="ep-oneliner">Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang&#x27;s Nvidia reinstatement and a claimed Claude-aided Riemann proof.</p>
-  <details class="ep-details">
-    <summary><span class="ep-caret">▸</span> Details <span class="ep-summary-meta">· 5 bullets · 345 words · search transcript</span></summary>
-    <div class="ep-expanded-body">
-      <div class="ep-novelty-note"><strong>Why continuing:</strong> Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.</div>
-      <ul class="chevron-list"><li>Opens with a news recap covering Jensen Huang&#x27;s reinstatement as Nvidia CEO, Anthropic&#x27;s IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source.</li><li>Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek.</li><li>Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of &#x27;perpetual overmatch&#x27;, alongside the possibility of Chinese retaliation.</li><li>The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash.</li><li>Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda.</li></ul>
-      <div class="ep-tags"><span class="guest-chip-label" style="margin-right:2px;">Cited</span><span class="tech-tag work-tag">The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins)</span><span class="tech-tag work-tag">NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release)</span><span class="tech-tag work-tag">U.S. Tracked Alice Huang&#x27;s Contacts With China Spy Agency During Nvidia Affair (New York Times)</span><span class="tech-tag work-tag">Statement from Anthropic mathematician on solving the Riemann Hypothesis</span></div>
-      
-<div class="in-ep-search-box">
-  <div class="in-ep-search-bar">
-    <input type="search" class="ep-transcript-search"
-      data-ep-id="20"
-      data-transcript-src="transcripts/ep-20.js"
-      data-tier-label="show notes"
-      data-word-count="345"
-      placeholder="search inside this episode (show notes)..."
-      aria-label="Search inside Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?">
-    <span class="ep-search-status">ready · show notes (345 words)</span>
-  </div>
-  <div class="ep-search-hits"></div>
-</div>
-
-    </div>
-  </details>
-</article>
-
-      <div class="quiet-channels">Quiet in this issue: Dwarkesh Podcast, ChinaTalk, The Cognitive Revolution, Latent Space, Machine Learning Street Talk, AXRP, The AI Power Podcast, 80,000 Hours Podcast, Scaling Laws (Lawfare), The Spillover (CFR), Sharp Tech / Stratechery</div>
+      <p class="masthead-sub" style="padding:24px 0;">No episodes in this digest.</p>
+      <div class="quiet-channels">Quiet in this issue: Dwarkesh Podcast, ChinaTalk, The Cognitive Revolution, Latent Space, Machine Learning Street Talk, AXRP, The AI Power Podcast, 80,000 Hours Podcast, CSIS AI Policy Podcast, Scaling Laws (Lawfare), The Spillover (CFR), Sharp Tech / Stratechery</div>
     </main>
 
     <div class="drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
     <aside class="guest-sidebar" id="guest-sidebar" aria-label="Guest Intelligence">
       <div class="sidebar-head">
-        <div class="sidebar-kicker">Guest Intelligence (1)</div>
+        <div class="sidebar-kicker">Guest Intelligence (0)</div>
         <button type="button" class="sidebar-close" id="close-sidebar" aria-controls="guest-sidebar">Hide ›</button>
       </div>
       <input type="search" class="sidebar-search" id="guest-search" placeholder="filter name, org, expertise..." aria-label="Filter guests">
-      
-<div class="guest-card" id="guest-5" data-search="Ben Buchanan Assistant Professor · Johns Hopkins SAIS AI Policy Expert Former White House Special Advisor for AI, leading the development and execution of the Biden administration&#x27;s AI policy. Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity. Expert in the intersection of cybersecurity, artificial intelligence, and statecraft. CSIS AI Policy Podcast">
-  <div class="gc-head">
-    <div class="gc-name">Ben Buchanan</div>
-    <span class="status-badge badge-seen">SEEN · 2 eps</span>
-  </div>
-  <div class="gc-aff">Assistant Professor · Johns Hopkins SAIS</div>
-  <div class="gc-lens">AI Policy Expert</div>
-  <div class="gc-section-label">Expertise Backing</div><ul class="gc-evidence"><li>Former White House Special Advisor for AI, leading the development and execution of the Biden administration&#x27;s AI policy.<a class="cite-link" href="https://www.google.com/goto?url=CAEScgHEIkXXIBQEJphJV3DdXrO7tHrhOBP2Q3tI6frog8IJgJyH4G6iTzBkuTtxLOeePQscq3Zvll5AtRh2ruB-QK6QIfoh1d-7msqR9oYEZ_UZ8UvDta0I2ucdxOLiClUGzo1dC_EFrAV_ln9D6IsfRycfAQ" target="_blank" rel="noopener noreferrer">[Google Search ↗]</a></li><li>Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity.<span class="cite-muted">[episode bio]</span></li><li>Expert in the intersection of cybersecurity, artificial intelligence, and statecraft.<a class="cite-link" href="https://www.google.com/goto?url=CAESawHEIkXXf2XUELZCXRJI0dHSZDbEh8VQQz9gdCAIFjzthHuUb1k1FOPt6MYs9SjpUFsBKR2-4GksvfRx6T7TyYeM9y-EXMrqnUdZ-helmCy9nmQ9ArVzuxHgHESk25wIdCgxa7rjLm2tA1E0" target="_blank" rel="noopener noreferrer">[Google Search ↗]</a></li></ul>
-  <div class="gc-section-label">Today's Thesis</div><p class="gc-thesis">Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety.</p>
-  <div class="gc-shows"><a class="show-jump" href="#ep-20" data-ep-id="20">CSIS AI Policy Podcast</a></div>
-</div>
-
+      <p class="gc-thesis">No external guests extracted in this issue (host-only episodes).</p>
     </aside>
   </div>
 
   <footer class="page-footer">
     <span>DailyDigest static artifact · data in <code>#digest-data</code> · Discovery radar: 2 breakout</span>
-    <span><a class="jump-link" href="../../../guests/index.html">Full Guest Directory →</a></span>
+    <span><span class="jump-disabled" aria-disabled="true">Latest snapshot only · full archive local</span></span>
   </footer>
 </div>
 
 <button type="button" class="edge-toggle edge-toggle-collapsed" id="open-sidebar" aria-controls="guest-sidebar">
-  ‹ Guests (1)
+  ‹ Guests (0)
 </button>
 
 <script type="application/json" id="digest-data">
@@ -1108,75 +1091,27 @@ footer.page-footer {
       "description": "Platforms, chips, business models, and industry structure"
     }
   ],
-  "executive_summary": {
-    "headline": "CSIS's weekly AI policy show pairs Ben Buchanan's White House retrospective with news recaps of Jensen Huang's Nvidia reinstatement and a claimed Claude-assisted Riemann Hypothesis proof, most of it an extension of threads already running.",
-    "baseline_episode_count": 90,
-    "common_themes": [
-      {
-        "theme": "Buchanan on US-China AI strategy",
-        "summary": "Today's episode repeats Buchanan's earlier rounds on Biden-era export controls, compute governance and spending a US lead on safety, which also ran on The Cognitive Revolution (Nov 21) and The AI Power Podcast (Nov 10). Today's addition is the tie-in to the BIS remote-access rule and the Trump-Xi APEC talks.",
-        "refs": [
-          {
-            "item_id": 20,
-            "source_name": "CSIS AI Policy Podcast"
-          }
-        ]
-      },
-      {
-        "theme": "Nvidia leadership and export-control fallout",
-        "summary": "The Huang saga (resignation, spy affair, BIS remote-access rule) has run for roughly two weeks across many shows. Today's recap adds his reinstatement as CEO and board director.",
-        "refs": [
-          {
-            "item_id": 20,
-            "source_name": "CSIS AI Policy Podcast"
-          }
-        ]
-      }
-    ],
-    "technical_advances": [],
-    "legitimately_new": [
-      {
-        "signal": "Jensen Huang reinstated as Nvidia CEO",
-        "why_new": "The archive covers only his resignation and the aftermath; Nvidia's press release reversing it is a new development, and Sharp Tech's Nov 20 episode argued he wasn't coming back.",
-        "refs": [
-          {
-            "item_id": 20,
-            "source_name": "CSIS AI Policy Podcast"
-          }
-        ]
-      },
-      {
-        "signal": "Claimed Claude-assisted Riemann Hypothesis proof",
-        "why_new": "No prior archive coverage of an Anthropic mathematician's statement claiming Claude helped prove the Riemann Hypothesis, though the claim is only relayed in a news recap here.",
-        "refs": [
-          {
-            "item_id": 20,
-            "source_name": "CSIS AI Policy Podcast"
-          }
-        ]
-      }
-    ]
-  },
+  "executive_summary": null,
   "discovery_items": [
+    {
+      "surface": "News",
+      "title": "China’s Shenzhou 24 spacecraft docks at space station with first foreign astronaut",
+      "url": "https://www.nbcnews.com/world/china/china-shenzhou-24-spacecraft-docks-space-station-foreign-astronaut-rcna611251",
+      "domain": "nbcnews.com",
+      "engagement_label": "Science News · nbcnews.com",
+      "loudness_score": 80,
+      "domain_category": "Space",
+      "why_notable": "The first foreign astronaut aboard China's Tiangong station marks a historic shift in international human spaceflight cooperation."
+    },
     {
       "surface": "HN",
       "title": "Matrix Multiplication is Θ(n^2.25) [pdf]",
       "url": "https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf",
       "domain": "github.com",
-      "engagement_label": "HN 834 pts · 458 comments",
-      "loudness_score": 80,
-      "domain_category": "Mathematics",
-      "why_notable": "A claimed tight bound for matrix multiplication near n^2.25 would be a major step in theoretical computer science and mathematics, and it is dominating technical discourse."
-    },
-    {
-      "surface": "News",
-      "title": "China's Shenzhou-24 mission launches 1st international astronaut to Tiangong space station",
-      "url": "https://www.space.com/space-exploration/human-spaceflight/china-shenzhou-24-first-international-astronaut-launch-tiangong-space-station",
-      "domain": "space.com",
-      "engagement_label": "Science News · space.com",
+      "engagement_label": "HN 878 pts · 491 comments",
       "loudness_score": 79,
-      "domain_category": "Space",
-      "why_notable": "The first international astronaut flying to China's Tiangong station is a milestone for crewed spaceflight and space geopolitics."
+      "domain_category": "Mathematics",
+      "why_notable": "A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science, though it is unverified and drawing intense scrutiny."
     }
   ],
   "keyword_trends": {
@@ -1803,102 +1738,15 @@ footer.page-footer {
     ]
   },
   "stats": {
-    "episode_count": 1,
-    "guest_count": 1,
-    "returning_guest_count": 1,
+    "episode_count": 0,
+    "guest_count": 0,
+    "returning_guest_count": 0,
     "new_signal_count": 0,
     "discovery_count": 2,
-    "active_source_count": 1
+    "active_source_count": 0
   },
-  "episodes": [
-    {
-      "item_id": 20,
-      "source_slug": "csis-ai-policy",
-      "source_name": "CSIS AI Policy Podcast",
-      "category": "geopolitics",
-      "category_label": "Policy & Geopolitics",
-      "category_tone": "amber",
-      "title": "Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?",
-      "url": "",
-      "published_at": "2026-11-25T10:00:00+00:00",
-      "duration_sec": 4525,
-      "transcript_tier": "show_notes_only",
-      "transcript_words": 345,
-      "one_liner": "Buchanan discusses crafting Biden-era AI export controls and the US-China contest, while the opening recap flags Huang's Nvidia reinstatement and a claimed Claude-aided Riemann proof.",
-      "novelty_label": "continuing",
-      "novelty_reason": "Buchanan interview extends Nov 10 and Nov 21 coverage; Huang reinstatement is new.",
-      "bullets": [
-        "Opens with a news recap covering Jensen Huang's reinstatement as Nvidia CEO, Anthropic's IPO and its safety implications, and a claim that Claude helped prove the Riemann hypothesis, with a statement from an Anthropic mathematician cited as the source.",
-        "Ben Buchanan, former Biden White House Special Advisor for AI, discusses his time in the administration and the crafting of AI export controls, including the new BIS remote-access rule and debates over compute smuggling and DeepSeek.",
-        "Buchanan frames the US-China contest around whether democracies must lead on AI, what happens if autocracies reach advanced AI first, and the idea of 'perpetual overmatch', alongside the possibility of Chinese retaliation.",
-        "The conversation covers Trump-Xi APEC talks and proposed AI guardrails with Beijing, and argues that a US lead in AI could be used to buy safety, paired with the case for public-facing regulation amid backlash.",
-        "Discussion of policy architecture includes state AI laws as a possible blueprint, a federal AI regulator versus AISI, the role of the NSC, and what survived from the Biden-era AI agenda."
-      ],
-      "topics": [
-        "export-controls",
-        "us-china-relations",
-        "compute-governance",
-        "ai-safety-regulation",
-        "ai-geopolitics",
-        "nvidia"
-      ],
-      "referenced_works": [
-        "The Bitter Struggle: Superintelligence, Superpowers, and the Fate of the World (Ben Buchanan and Tantum Collins)",
-        "NVIDIA Board Reinstates Jensen Huang as President, CEO and Board Director (Nvidia press release)",
-        "U.S. Tracked Alice Huang's Contacts With China Spy Agency During Nvidia Affair (New York Times)",
-        "Statement from Anthropic mathematician on solving the Riemann Hypothesis",
-        "Superintelligence is Arriving (essay by Alexandr Wang)",
-        "Perplexity and Intelligence (essay by Jakub Pachocki)"
-      ],
-      "guests": [
-        {
-          "person_id": 5,
-          "name": "Ben Buchanan",
-          "affiliation": "Johns Hopkins SAIS",
-          "role_title": "Assistant Professor",
-          "core_thesis": "Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety."
-        }
-      ]
-    }
-  ],
-  "guests": [
-    {
-      "person_id": 5,
-      "name": "Ben Buchanan",
-      "affiliation": "Johns Hopkins SAIS",
-      "role_title": "Assistant Professor",
-      "role_lens": "AI Policy Expert",
-      "expertise_backing": [
-        {
-          "claim": "Former White House Special Advisor for AI, leading the development and execution of the Biden administration's AI policy.",
-          "source_url": "https://www.google.com/goto?url=CAEScgHEIkXXIBQEJphJV3DdXrO7tHrhOBP2Q3tI6frog8IJgJyH4G6iTzBkuTtxLOeePQscq3Zvll5AtRh2ruB-QK6QIfoh1d-7msqR9oYEZ_UZ8UvDta0I2ucdxOLiClUGzo1dC_EFrAV_ln9D6IsfRycfAQ",
-          "source_label": "Google Search"
-        },
-        {
-          "claim": "Co-author of The Bitter Struggle, contributing to discussions on AI and cybersecurity.",
-          "source_url": null,
-          "source_label": "episode bio"
-        },
-        {
-          "claim": "Expert in the intersection of cybersecurity, artificial intelligence, and statecraft.",
-          "source_url": "https://www.google.com/goto?url=CAESawHEIkXXf2XUELZCXRJI0dHSZDbEh8VQQz9gdCAIFjzthHuUb1k1FOPt6MYs9SjpUFsBKR2-4GksvfRx6T7TyYeM9y-EXMrqnUdZ-helmCy9nmQ9ArVzuxHgHESk25wIdCgxa7rjLm2tA1E0",
-          "source_label": "Google Search"
-        }
-      ],
-      "total_appearances": 2,
-      "distinct_sources": 2,
-      "appearances": [
-        {
-          "item_id": 20,
-          "source_slug": "csis-ai-policy",
-          "source_name": "CSIS AI Policy Podcast",
-          "item_title": "Crafting White House AI Policy with Ben Buchanan + Jensen, Back So Soon?",
-          "core_thesis": "Argues, drawing on The Bitter Struggle, that democracies must lead in AI development to prevent autocracies from reaching advanced AI first, and that a US lead can be leveraged to enable safety.",
-          "stated_bio": "Former White House Special Advisor for AI in the Biden Administration; co-author of The Bitter Struggle."
-        }
-      ]
-    }
-  ],
+  "episodes": [],
+  "guests": [],
   "quiet_sources": [
     {
       "slug": "dwarkesh",
@@ -1938,6 +1786,11 @@ footer.page-footer {
     {
       "slug": "80000-hours",
       "name": "80,000 Hours Podcast",
+      "category": "geopolitics"
+    },
+    {
+      "slug": "csis-ai-policy",
+      "name": "CSIS AI Policy Podcast",
       "category": "geopolitics"
     },
     {
