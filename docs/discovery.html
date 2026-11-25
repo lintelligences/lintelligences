@@ -164,7 +164,7 @@ nav.topbar {
   gap: 8px;
   flex-wrap: wrap;
 }
-a.pill, button.pill {
+.pill {
   appearance: none;
   font-family: var(--font);
   font-size: 12px;
@@ -183,8 +183,9 @@ a.pill, button.pill {
   cursor: pointer;
   transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
 }
+span.pill { cursor: default; }
 a.pill:hover, button.pill:hover { background: var(--pill-hover); }
-a.pill.active { background: var(--ink); color: var(--bg); }
+.pill.active { background: var(--ink); color: var(--bg); }
 .pill-disabled {
   font-family: var(--font);
   font-size: 12px;
@@ -1007,7 +1008,7 @@ footer.page-footer {
     <div class="eb-baseline">seed issue</div>
   </div>
   
-  <div class="eb-flow"><div class="eb-block"><div class="eb-col-title eb-title-radar">Discovery</div><ul class="eb-list eb-list-radar"><li><span class="radar-cat">Space</span><span class="eb-item-lead"><a href="https://www.nbcnews.com/world/china/china-shenzhou-24-spacecraft-docks-space-station-foreign-astronaut-rcna611251" target="_blank" rel="noopener noreferrer">China’s Shenzhou 24 spacecraft docks at space station with first foreign astronaut<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Science News · nbcnews.com</span> <span class="eb-item-desc">— The first foreign astronaut aboard China&#x27;s Tiangong station marks a historic shift in international human spaceflight cooperation.</span></li><li><span class="radar-cat">Mathematics</span><span class="eb-item-lead"><a href="https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf" target="_blank" rel="noopener noreferrer">Matrix Multiplication is Θ(n^2.25) [pdf]<span class="ext-arrow">↗</span></a></span><span class="radar-metric">HN 878 pts · 491 comments</span> <span class="eb-item-desc">— A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science, though it is unverified and drawing intense scrutiny.</span></li></ul></div></div>
+  <div class="eb-flow"><div class="eb-block"><div class="eb-col-title eb-title-radar">Discovery</div><ul class="eb-list eb-list-radar"><li><span class="radar-cat">Mathematics</span><span class="eb-item-lead"><a href="https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf" target="_blank" rel="noopener noreferrer">Matrix Multiplication is Θ(n^2.25) [pdf]<span class="ext-arrow">↗</span></a></span><span class="radar-metric">HN 886 pts · 499 comments</span> <span class="eb-item-desc">— A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science if it survives scrutiny, and it is dominating technical discourse.</span></li><li><span class="radar-cat">Space</span><span class="eb-item-lead"><a href="https://www.nbcnews.com/world/china/china-shenzhou-24-spacecraft-docks-space-station-foreign-astronaut-rcna611251" target="_blank" rel="noopener noreferrer">China’s Shenzhou 24 spacecraft docks at space station with first foreign astronaut<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Science News · nbcnews.com</span> <span class="eb-item-desc">— The first foreign astronaut aboard China&#x27;s space station is a historic step in international spaceflight cooperation and geopolitics.</span></li><li><span class="radar-cat">Economics</span><span class="eb-item-lead"><a href="https://www.bbc.com/news/articles/c893r9ke5p97o" target="_blank" rel="noopener noreferrer">US announces new tariffs on host of countries including China<span class="ext-arrow">↗</span></a></span><span class="radar-metric">Google News · 4+ outlets</span> <span class="eb-item-desc">— New US tariffs on many countries including China, covered across 4+ outlets, can reshape global trade and prices.</span></li></ul></div></div>
 </section>
 
   
@@ -1052,7 +1053,7 @@ footer.page-footer {
   </div>
 
   <footer class="page-footer">
-    <span>DailyDigest static artifact · data in <code>#digest-data</code> · Discovery radar: 2 breakout</span>
+    <span>DailyDigest static artifact · data in <code>#digest-data</code> · Discovery radar: 3 breakout</span>
     <span><span class="jump-disabled" aria-disabled="true">Latest snapshot only · full archive local</span></span>
   </footer>
 </div>
@@ -1094,6 +1095,16 @@ footer.page-footer {
   "executive_summary": null,
   "discovery_items": [
     {
+      "surface": "HN",
+      "title": "Matrix Multiplication is Θ(n^2.25) [pdf]",
+      "url": "https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf",
+      "domain": "github.com",
+      "engagement_label": "HN 886 pts · 499 comments",
+      "loudness_score": 80,
+      "domain_category": "Mathematics",
+      "why_notable": "A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science if it survives scrutiny, and it is dominating technical discourse."
+    },
+    {
       "surface": "News",
       "title": "China’s Shenzhou 24 spacecraft docks at space station with first foreign astronaut",
       "url": "https://www.nbcnews.com/world/china/china-shenzhou-24-spacecraft-docks-space-station-foreign-astronaut-rcna611251",
@@ -1101,17 +1112,17 @@ footer.page-footer {
       "engagement_label": "Science News · nbcnews.com",
       "loudness_score": 80,
       "domain_category": "Space",
-      "why_notable": "The first foreign astronaut aboard China's Tiangong station marks a historic shift in international human spaceflight cooperation."
+      "why_notable": "The first foreign astronaut aboard China's space station is a historic step in international spaceflight cooperation and geopolitics."
     },
     {
-      "surface": "HN",
-      "title": "Matrix Multiplication is Θ(n^2.25) [pdf]",
-      "url": "https://github.com/openai/math/blob/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026/paper.pdf",
-      "domain": "github.com",
-      "engagement_label": "HN 878 pts · 491 comments",
+      "surface": "News",
+      "title": "US announces new tariffs on host of countries including China",
+      "url": "https://www.bbc.com/news/articles/c893r9ke5p97o",
+      "domain": "bbc.com",
+      "engagement_label": "Google News · 4+ outlets",
       "loudness_score": 79,
-      "domain_category": "Mathematics",
-      "why_notable": "A claimed tight bound on matrix multiplication complexity would be a landmark result in theoretical computer science, though it is unverified and drawing intense scrutiny."
+      "domain_category": "Economics",
+      "why_notable": "New US tariffs on many countries including China, covered across 4+ outlets, can reshape global trade and prices."
     }
   ],
   "keyword_trends": {
@@ -1742,7 +1753,7 @@ footer.page-footer {
     "guest_count": 0,
     "returning_guest_count": 0,
     "new_signal_count": 0,
-    "discovery_count": 2,
+    "discovery_count": 3,
     "active_source_count": 0
   },
   "episodes": [],
