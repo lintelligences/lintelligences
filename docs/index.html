@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Random · NEIC Live Seismogram</title>
+  <title>Observatory · NEIC Live Seismogram</title>
   <style>
     @font-face {
       src: local('Consolas'), local('Consolas Bold');
@@ -230,7 +230,7 @@
   <canvas id="stage" aria-label="Greyscale world map with live NEIC earthquake waveform"></canvas>
 
   <header class="hud" id="hud">
-    <div class="kicker" id="kicker">NEIC · RANDOM WAVEFORM</div>
+    <div class="kicker" id="kicker">OBSERVATORY · NEIC SEISMOGRAM</div>
     <h1 class="title" id="eventTitle">Pulling recent seismic catalog…</h1>
     <div class="meta" id="eventMeta">Connecting to USGS NEIC &amp; EarthScope FDSN</div>
     <div class="status-line" id="statusLine">→ querying earthquake.usgs.gov<span class="cursor"></span></div>
@@ -239,6 +239,9 @@
   <footer class="bar">
     <div class="bar-group">
       <a class="pill" href="https://github.com/lintelligences">← Profile</a>
+      <a class="subtle-link" href="launcher.html">Behavior</a>
+      <a class="subtle-link" href="discovery.html">Briefings</a>
+      <a class="subtle-link" href="https://lintel-libraries.vercel.app">Libraries ↗</a>
       <a class="subtle-link" id="usgsLink" href="https://earthquake.usgs.gov" target="_blank" rel="noopener noreferrer" hidden>neic event ↗</a>
       <span class="whisper" id="whisper" hidden></span>
     </div>
